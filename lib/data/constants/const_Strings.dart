@@ -71,33 +71,46 @@ class CustomConst {
   static const String THREE_D_SECURE_ACTIVITY_TITLE =
       "three_d_secure_activity_title";
 
- static const  String AMOUNT_CENTS = "amount_cents";
- static const  String IS_REFUNDED = "is_refunded";
- static const  String IS_CAPTURE = "is_capture";
- static const  String CAPTURED_AMOUNT = "captured_amount";
- static const  String SOURCE_DATA_TYPE = "source_data.type";
- static const  String PENDING = "pending";
- static const  String MERCHANT_ORDER_ID = "merchant_order_id";
- static const  String IS_3D_SECURE = "is_3d_secure";
- static const  String ID_od = "od";
- static const  String IS_VOID = "is_void";
- static const  String CURRENCY = "currency";
- static const  String IS_AUTH = "is_auth";
- static const  String IS_REFUND = "is_refund";
- static const  String OWNER = "owner";
- static const  String IS_VOIDED = "is_voided";
- static const  String SOURCE_DATA_PAN = "source_data.pan";
- static const  String PROFILE_ID = "profile_id";
- static const  String SUCCESS = "success";
- static const  String DATA_MESSAGE = "data.message";
- static const  String SOURCE_DATA_SUB_TYPE = "source_data.sub_type";
- static const  String ERROR_OCCURED = "error_occured";
- static const  String IS_STANDALONE_PAYMENT = "is_standalone_oayment";
- static const  String REFUNDED_AMOUNT_CENTS = "refunded_amount_cents";
- static const  String INTEGRATION_ID = "integration_id";
- static const  String ORDER = "order";
- static const  String REDIRECTION_URL = "redirection_url";
+  static const String AMOUNT_CENTS = "amount_cents";
+  static const String IS_REFUNDED = "is_refunded";
+  static const String IS_CAPTURE = "is_capture";
+  static const String CAPTURED_AMOUNT = "captured_amount";
+  static const String SOURCE_DATA_TYPE = "source_data.type";
+  static const String PENDING = "pending";
+  static const String MERCHANT_ORDER_ID = "merchant_order_id";
+  static const String IS_3D_SECURE = "is_3d_secure";
+  static const String ID_od = "od";
+  static const String IS_VOID = "is_void";
+  static const String CURRENCY = "currency";
+  static const String IS_AUTH = "is_auth";
+  static const String IS_REFUND = "is_refund";
+  static const String OWNER = "owner";
+  static const String IS_VOIDED = "is_voided";
+  static const String SOURCE_DATA_PAN = "source_data.pan";
+  static const String PROFILE_ID = "profile_id";
+  static const String SUCCESS = "success";
+  static const String DATA_MESSAGE = "data.message";
+  static const String SOURCE_DATA_SUB_TYPE = "source_data.sub_type";
+  static const String ERROR_OCCURED = "error_occured";
+  static const String IS_STANDALONE_PAYMENT = "is_standalone_oayment";
+  static const String REFUNDED_AMOUNT_CENTS = "refunded_amount_cents";
+  static const String INTEGRATION_ID = "integration_id";
+  static const String ORDER = "order";
+  static const String REDIRECTION_URL = "redirection_url";
 
- static const String LANGUAGE_ENGLISH = "en";
- static const String LANGUAGE_ENGLISH_US = "US";
+  static const String LANGUAGE_ENGLISH = "en";
+  static const String LANGUAGE_ENGLISH_US = "US";
+
+// route
+  static const String OrderRegistration = '/ecommerce/orders';
+  static const String Authentication = '/auth/tokens';
+
+  // keys
+  static const String Api_Key = "api_key";
+  static const String ApiErrorWord = 'api error::';
+
+  static const int connectTimeout = 10000;
+
+  static const String ContentTypeKey = 'Content-Type';
+  static const String ContentTypeValue = 'application/json';
 }
