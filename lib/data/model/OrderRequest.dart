@@ -70,6 +70,7 @@ class OrderRequest {
 /// last_name : "ayman"
 /// state : "Utah"
 
+
 class ShippingData {
   ShippingData({
       this.apartment, 
@@ -154,9 +155,9 @@ class Items {
     quantity = json['quantity'];
   }
   String? name;
-  String? amountCents;
+  int? amountCents;
   String? description;
-  String? quantity;
+  int? quantity;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

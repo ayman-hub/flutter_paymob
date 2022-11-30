@@ -1,0 +1,17 @@
+/// token : "ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SnZjbVJsY2w5cFpDSTZPRE01TURRMk5ERXNJbVY0ZEhKaElqcDdmU3dpY0cxclgybHdJam9pTVRrM0xqRXpNeTQ0T1M0eU5URWlMQ0pzYjJOclgyOXlaR1Z5WDNkb1pXNWZjR0ZwWkNJNlptRnNjMlVzSW1GdGIzVnVkRjlqWlc1MGN5STZNVEF3TENKaWFXeHNhVzVuWDJSaGRHRWlPbnNpWm1seWMzUmZibUZ0WlNJNkltRjViV0Z1SWl3aWJHRnpkRjl1WVcxbElqb2lZWFJsWmlJc0luTjBjbVZsZENJNkluTjBjbVZsZENJc0ltSjFhV3hrYVc1bklqb2lZblZwYkdScGJtY2lMQ0ptYkc5dmNpSTZJbVpzYjI5eUlpd2lZWEJoY25SdFpXNTBJam9pWVhCaGNuUnRaVzUwSWl3aVkybDBlU0k2SW1OaGFYSnZJaXdpYzNSaGRHVWlPaUp6ZEhKbFpYUWlMQ0pqYjNWdWRISjVJam9pWldkNWNIUWlMQ0psYldGcGJDSTZJbUY1YldGdUxtRjBaV1kyTlVCNVlXaHZieTVqYjIwaUxDSndhRzl1WlY5dWRXMWlaWElpT2lJd01UQXdNalExTkRZNE9DSXNJbkJ2YzNSaGJGOWpiMlJsSWpvaU1qRXpOVFFpTENKbGVIUnlZVjlrWlhOamNtbHdkR2x2YmlJNklrNUJJbjBzSW1OMWNuSmxibU41SWpvaVJVZFFJaXdpWlhod0lqb3hOalk1T0RBMU5EVTRMQ0pwYm5SbFozSmhkR2x2Ymw5cFpDSTZNalEwT0RnME1pd2ljMmx1WjJ4bFgzQmhlVzFsYm5SZllYUjBaVzF3ZENJNlptRnNjMlVzSW5WelpYSmZhV1FpT2pRME1UTTFObjAucVZweDZURkpHb1VUYkVMQTNwdlhWdFMwcmJQUE5tNUtjUXF2MHdfQTdxdUZuSTVoaVg1ZFZPd2NyUjNQS21uUFl4WExraHoyVl9WdUFYRTRBcm5zRHc="
+
+class PaymentKeyResponse {
+  PaymentKeyResponse({
+      this.token,});
+
+  PaymentKeyResponse.fromJson(dynamic json) {
+    token = json['token'];
+  }
+  String? token;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['token'] = token;
+    return map;
+  }
+}

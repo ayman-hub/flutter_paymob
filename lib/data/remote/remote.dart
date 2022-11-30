@@ -1,6 +1,8 @@
 import 'package:pay_mob/data/constants/const_Strings.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/OrderResponse.dart';
+import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
+import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
 import 'package:pay_mob/data/model/TokenModel.dart';
 import 'package:pay_mob/print_types.dart';
 
@@ -35,5 +37,16 @@ class Remote {
       },
       formData: false,
     );
+  }
+
+  Future<dynamic> paymentKey(PaymentKeyRequest paymentKeyRequest) async {
+    return _helper.post(path: '/acceptance/payment_keys', paymentKeyRequest.toJson(),
+        onSuccess: (Map<String, dynamic> data) {
+      Print.success(data);
+      return PaymentKeyResponse.fromJson(data);
+    }, onError: (Map<String, dynamic> data) {
+      Print.warning('api error:: $data');
+      return data;
+    }, formData: false);
   }
 }

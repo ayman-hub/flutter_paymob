@@ -3,6 +3,6 @@ import 'package:flutter/material.dart';
 
 
 String apiUrl() {
-  return "https://accept.paymob.com/api/";
+  return "https://accept.paymob.com/api";
   //return FlutterConfig.get("api_url");
 }

@@ -1,3 +1,5 @@
+import 'package:pay_mob/data/model/OrderRequest.dart';
+
 /// id : 82012120
 /// created_at : "2022-11-21T14:07:30.368204"
 /// delivery_needed : false
@@ -65,7 +67,7 @@ class OrderResponse {
     merchant = json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     collector = json['collector'];
     amountCents = json['amount_cents'];
-    shippingData = json['shipping_data'] != null ? ShippingData.fromJson(json['shipping_data']) : null;
+    shippingData = json['shipping_data'] != null ? ResponseShippingData.fromJson(json['shipping_data']) : null;
     currency = json['currency'];
     isPaymentLocked = json['is_payment_locked'];
     isReturn = json['is_return'];
@@ -99,7 +101,7 @@ class OrderResponse {
   Merchant? merchant;
   dynamic collector;
   num? amountCents;
-  ShippingData? shippingData;
+  ResponseShippingData? shippingData;
   String? currency;
   bool? isPaymentLocked;
   bool? isReturn;
@@ -163,39 +165,6 @@ class OrderResponse {
 
 }
 
-/// name : "ASC1515"
-/// description : "Smart Watch"
-/// amount_cents : 500000
-/// quantity : 1
-
-class Items {
-  Items({
-      this.name, 
-      this.description, 
-      this.amountCents, 
-      this.quantity,});
-
-  Items.fromJson(dynamic json) {
-    name = json['name'];
-    description = json['description'];
-    amountCents = json['amount_cents'];
-    quantity = json['quantity'];
-  }
-  String? name;
-  String? description;
-  num? amountCents;
-  num? quantity;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['name'] = name;
-    map['description'] = description;
-    map['amount_cents'] = amountCents;
-    map['quantity'] = quantity;
-    return map;
-  }
-
-}
 
 /// id : 42308968
 /// first_name : "Clifford"
@@ -215,8 +184,8 @@ class Items {
 /// order_id : 82012120
 /// order : 82012120
 
-class ShippingData {
-  ShippingData({
+class ResponseShippingData {
+  ResponseShippingData({
       this.id, 
       this.firstName, 
       this.lastName, 
@@ -235,7 +204,7 @@ class ShippingData {
       this.orderId, 
       this.order,});
 
-  ShippingData.fromJson(dynamic json) {
+  ResponseShippingData.fromJson(dynamic json) {
     id = json['id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
