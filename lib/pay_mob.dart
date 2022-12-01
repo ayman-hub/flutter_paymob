@@ -2,16 +2,33 @@ library pay_mob;
 
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
-import 'package:pay_mob/data/model/TokenModel.dart';
 import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
 
+import 'data/model/OrderResponse.dart';
+import 'data/model/TokenModel.dart';
+
 class PayMob {
+  PayMob._();
+  final Remote _remote = Remote(DioHelper());
+
   ///library [pay_mob] that you can use it for payment with paymob in flutter
   /// For More Details
   /// go to https://docs.paymob.com/docs/
-  PayMob({required this.paymentKey});
-  final Remote _remote = Remote(DioHelper());
+  ///
+  /// ---------------------------------------------
+  /// Inter this with your actual payment-key && iframe && integrationID that in paymob
+  /// You Can Find  https://accept.paymob.com/portal2/en/settings
+  ///
+  PayMob.init({
+    required String paymentKey,
+    required int iframe,
+    required int integrationID,
+  }) {
+    _paymentAuthKey = paymentKey;
+    _iFrameCode = iframe;
+    _integrationId = integrationID;
+  }
 
   // Arbitrary number and used only in this activity. Change it as you wish.
   static const int ACCEPT_PAYMENT_REQUEST = 10;
@@ -19,10 +36,49 @@ class PayMob {
   /// Inter this with your actual payment-key that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
-  late String paymentKey;
-   late int iframe;
-  String expaymentKey =
-      "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmxlSEFpT2pFMk5Ea3dPREUzTkRNc0ltOXlaR1Z5WDJsa0lqbzBNREkxTXpneE5pd2lZM1Z5Y21WdVkza2lPaUpGUjFBaUxDSnNiMk5yWDI5eVpHVnlYM2RvWlc1ZmNHRnBaQ0k2Wm1Gc2MyVXNJbUpwYkd4cGJtZGZaR0YwWVNJNmV5Sm1hWEp6ZEY5dVlXMWxJam9pUTJ4cFptWnZjbVFpTENKc1lYTjBYMjVoYldVaU9pSk9hV052YkdGeklpd2ljM1J5WldWMElqb2lSWFJvWVc0Z1RHRnVaQ0lzSW1KMWFXeGthVzVuSWpvaU9EQXlPQ0lzSW1ac2IyOXlJam9pTkRJaUxDSmhjR0Z5ZEcxbGJuUWlPaUk0TURNaUxDSmphWFI1SWpvaVNtRnphMjlzYzJ0cFluVnlaMmdpTENKemRHRjBaU0k2SWxWMFlXZ2lMQ0pqYjNWdWRISjVJam9pUTFJaUxDSmxiV0ZwYkNJNkltTnNZWFZrWlhSMFpUQTVRR1Y0WVM1amIyMGlMQ0p3YUc5dVpWOXVkVzFpWlhJaU9pSXJPRFlvT0NrNU1UTTFNakV3TkRnM0lpd2ljRzl6ZEdGc1gyTnZaR1VpT2lJd01UZzVPQ0lzSW1WNGRISmhYMlJsYzJOeWFYQjBhVzl1SWpvaVRrRWlmU3dpZFhObGNsOXBaQ0k2TVRJNU16WXNJbUZ0YjNWdWRGOWpaVzUwY3lJNk1UQXdMQ0p3Yld0ZmFYQWlPaUl4T1RZdU1UVXpMak0wTGpFNU5DSXNJbWx1ZEdWbmNtRjBhVzl1WDJsa0lqb3hPRFk0TlgwLkFzazlYa0U0a1c5VnBOa0NuR1BZekpWaGc4NTFfRjg2a3JabzMyU05ael8xSGlNNVZ6RVBBVC1ScjNjOUs1bHlHNXpsczVPQjhTeUxiVWZPWGNtNjRR";
+  String get paymentAuthKey => _paymentAuthKey;
+
+  /// Inter this with your actual payment-key that in paymob
+  /// You Can Find  https://accept.paymob.com/portal2/en/settings
+  ///
+  late String _paymentAuthKey;
+
+  set paymentAuthKey(String value) {
+    _paymentAuthKey = value;
+  }
+
+  /// Inter this with your IframeCode that in paymob
+  /// You Can Find  https://accept.paymob.com/portal2/en/settings
+  ///
+  late int _iFrameCode;
+  int get iFrameCode => _iFrameCode;
+  set iFrameCode(int value) {
+    _iFrameCode = value;
+  }
+
+  /// Inter this with your IframeCode that in paymob
+  /// You Can Find  https://accept.paymob.com/portal2/en/settings
+  ///
+  late int _integrationId;
+  int get integrationId => _integrationId;
+  set integrationId(int value) {
+    _integrationId = value;
+  }
+
+  late OrderResponse _orderResponse;
+  // just for debug at this moment
+  OrderResponse get orderResponse => _orderResponse;
+
+  set orderResponse(OrderResponse value) {
+    _orderResponse = value;
+  }
+
+  late TokenModel _tokenModel;
+  // just for debug at this moment
+  TokenModel get tokenModel => _tokenModel;
+  set tokenModel(TokenModel value) {
+    _tokenModel = value;
+  }
 
   /// 1. Authentication Request:-
   /// _________________________________
@@ -30,7 +86,7 @@ class PayMob {
   /// you should do before dealing with any of Accept's APIs.
   /// It is a post request with  your [paymentKey] found in your dashboard
   Future<dynamic> getToken() async {
-    return _remote.token(paymentKey);
+    return tokenModel = await _remote.token(paymentAuthKey);
   }
 
   /// Order Registration API:-
@@ -41,11 +97,22 @@ class PayMob {
   /// Order ID will be the identifier that
   /// you will use to link the transaction(s) performed to your system,
   /// as one order can have more than one transaction.
-  Future<dynamic> order(OrderRequest orderRequest) {
-    return _remote.order(orderRequest);
+  Future<dynamic> order(OrderRequest orderRequest) async {
+    return orderResponse = await _remote.order(orderRequest);
   }
 
-  Future<dynamic> payment(PaymentKeyRequest paymentKeyRequest){
+  ///3. Payment Key Request
+  ///
+  /// At this step, you will obtain a payment_key token.
+  /// This key will be used to authenticate your payment request.
+  /// It will be also used for verifying your transaction request metadata.
+  /// return on Sucses [PaymentKeyResponse]
+  Future<dynamic> payment() {
+    PaymentKeyRequest paymentKeyRequest =
+        PaymentKeyRequest.fromOrderResponse(_orderResponse)
+          ..authToken = _tokenModel.token
+          ..integrationId = integrationId;
+
     return _remote.paymentKey(paymentKeyRequest);
   }
 }

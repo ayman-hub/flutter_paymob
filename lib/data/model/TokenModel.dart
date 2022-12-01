@@ -3,12 +3,14 @@
 
 class TokenModel {
   TokenModel({
-      this.token, 
-      this.profile,});
+    this.token,
+    this.profile,
+  });
 
   TokenModel.fromJson(dynamic json) {
     token = json['token'];
-    profile = json['profile'] != null ? Profile.fromJson(json['profile']) : null;
+    profile =
+        json['profile'] != null ? Profile.fromJson(json['profile']) : null;
   }
   String? token;
   Profile? profile;
@@ -21,7 +23,6 @@ class TokenModel {
     }
     return map;
   }
-
 }
 
 /// id : 247431
@@ -112,91 +113,92 @@ class TokenModel {
 
 class Profile {
   Profile({
-      this.id, 
-      this.user, 
-      this.createdAt, 
-      this.active, 
-      this.profileType, 
-      this.phones, 
-      this.companyEmails, 
-      this.companyName, 
-      this.state, 
-      this.country, 
-      this.city, 
-      this.postalCode, 
-      this.street, 
-      this.emailNotification, 
-      this.orderRetrievalEndpoint, 
-      this.deliveryUpdateEndpoint, 
-      this.logoUrl, 
-      this.isMobadra, 
-      this.sector, 
-      this.activationMethod, 
-      this.signedUpThrough, 
-      this.failedAttempts, 
-      this.customExportColumns, 
-      this.serverIP, 
-      this.username, 
-      this.primaryPhoneNumber, 
-      this.primaryPhoneVerified, 
-      this.isTempPassword, 
-      this.otpSentAt, 
-      this.otpSentTo, 
-      this.otpValidatedAt, 
-      this.awbBanner, 
-      this.emailBanner, 
-      this.identificationNumber, 
-      this.deliveryStatusCallback, 
-      this.merchantExternalLink, 
-      this.merchantStatus, 
-      this.deactivatedByBank, 
-      this.bankDeactivationReason, 
-      this.bankMerchantStatus, 
-      this.nationalId, 
-      this.superAgent, 
-      this.walletLimitProfile, 
-      this.address, 
-      this.commercialRegistration, 
-      this.commercialRegistrationArea, 
-      this.distributorCode, 
-      this.distributorBranchCode, 
-      this.allowTerminalOrderId, 
-      this.allowEncryptionBypass, 
-      this.walletPhoneNumber, 
-      this.suspicious, 
-      this.latitude, 
-      this.longitude, 
-      this.bankStaffs, 
-      this.bankRejectionReason, 
-      this.bankReceivedDocuments, 
-      this.bankMerchantDigitalStatus, 
-      this.bankDigitalRejectionReason, 
-      this.filledBusinessData, 
-      this.dayStartTime, 
-      this.dayEndTime, 
-      this.withholdTransfers, 
-      this.smsSenderName, 
-      this.withholdTransfersReason, 
-      this.withholdTransfersNotes, 
-      this.canBillDepositWithCard, 
-      this.canTopupMerchants, 
-      this.topupTransferId, 
-      this.referralEligible, 
-      this.paymobAppMerchant, 
-      this.settlementFrequency, 
-      this.dayOfTheWeek, 
-      this.dayOfTheMonth, 
-      this.allowTransactionNotifications, 
-      this.allowTransferNotifications, 
-      this.sallefnyAmountWhole, 
-      this.sallefnyFeesWhole, 
-      this.paymobAppFirstLogin, 
-      this.paymobAppLastActivity, 
-      this.acqPartner, 
-      this.salesOwner, 
-      this.dom, 
-      this.bankRelated, 
-      this.permissions,});
+    this.id,
+    this.user,
+    this.createdAt,
+    this.active,
+    this.profileType,
+    this.phones,
+    this.companyEmails,
+    this.companyName,
+    this.state,
+    this.country,
+    this.city,
+    this.postalCode,
+    this.street,
+    this.emailNotification,
+    this.orderRetrievalEndpoint,
+    this.deliveryUpdateEndpoint,
+    this.logoUrl,
+    this.isMobadra,
+    this.sector,
+    this.activationMethod,
+    this.signedUpThrough,
+    this.failedAttempts,
+    this.customExportColumns,
+    this.serverIP,
+    this.username,
+    this.primaryPhoneNumber,
+    this.primaryPhoneVerified,
+    this.isTempPassword,
+    this.otpSentAt,
+    this.otpSentTo,
+    this.otpValidatedAt,
+    this.awbBanner,
+    this.emailBanner,
+    this.identificationNumber,
+    this.deliveryStatusCallback,
+    this.merchantExternalLink,
+    this.merchantStatus,
+    this.deactivatedByBank,
+    this.bankDeactivationReason,
+    this.bankMerchantStatus,
+    this.nationalId,
+    this.superAgent,
+    this.walletLimitProfile,
+    this.address,
+    this.commercialRegistration,
+    this.commercialRegistrationArea,
+    this.distributorCode,
+    this.distributorBranchCode,
+    this.allowTerminalOrderId,
+    this.allowEncryptionBypass,
+    this.walletPhoneNumber,
+    this.suspicious,
+    this.latitude,
+    this.longitude,
+    this.bankStaffs,
+    this.bankRejectionReason,
+    this.bankReceivedDocuments,
+    this.bankMerchantDigitalStatus,
+    this.bankDigitalRejectionReason,
+    this.filledBusinessData,
+    this.dayStartTime,
+    this.dayEndTime,
+    this.withholdTransfers,
+    this.smsSenderName,
+    this.withholdTransfersReason,
+    this.withholdTransfersNotes,
+    this.canBillDepositWithCard,
+    this.canTopupMerchants,
+    this.topupTransferId,
+    this.referralEligible,
+    this.paymobAppMerchant,
+    this.settlementFrequency,
+    this.dayOfTheWeek,
+    this.dayOfTheMonth,
+    this.allowTransactionNotifications,
+    this.allowTransferNotifications,
+    this.sallefnyAmountWhole,
+    this.sallefnyFeesWhole,
+    this.paymobAppFirstLogin,
+    this.paymobAppLastActivity,
+    this.acqPartner,
+    this.salesOwner,
+    this.dom,
+    this.bankRelated,
+    this.permissions,
+  });
 
   Profile.fromJson(dynamic json) {
     id = json['id'];
@@ -205,7 +207,9 @@ class Profile {
     active = json['active'];
     profileType = json['profile_type'];
     phones = json['phones'] != null ? json['phones'].cast<String>() : [];
-    companyEmails = json['company_emails'] != null ? json['company_emails'].cast<String>() : [];
+    companyEmails = json['company_emails'] != null
+        ? json['company_emails'].cast<String>()
+        : [];
     companyName = json['company_name'];
     state = json['state'];
     country = json['country'];
@@ -413,7 +417,8 @@ class Profile {
     map['signed_up_through'] = signedUpThrough;
     map['failed_attempts'] = failedAttempts;
     if (customExportColumns != null) {
-      map['custom_export_columns'] = customExportColumns?.map((v) => v.toJson()).toList();
+      map['custom_export_columns'] =
+          customExportColumns?.map((v) => v.toJson()).toList();
     }
     if (serverIP != null) {
       map['server_IP'] = serverIP?.map((v) => v.toJson()).toList();
@@ -483,7 +488,6 @@ class Profile {
     }
     return map;
   }
-
 }
 
 /// id : 441356
@@ -501,18 +505,19 @@ class Profile {
 
 class User {
   User({
-      this.id, 
-      this.username, 
-      this.firstName, 
-      this.lastName, 
-      this.dateJoined, 
-      this.email, 
-      this.isActive, 
-      this.isStaff, 
-      this.isSuperuser, 
-      this.lastLogin, 
-      this.groups, 
-      this.userPermissions,});
+    this.id,
+    this.username,
+    this.firstName,
+    this.lastName,
+    this.dateJoined,
+    this.email,
+    this.isActive,
+    this.isStaff,
+    this.isSuperuser,
+    this.lastLogin,
+    this.groups,
+    this.userPermissions,
+  });
 
   User.fromJson(dynamic json) {
     id = json['id'];
@@ -531,7 +536,9 @@ class User {
         groups?.add(v);
       });
     }
-    userPermissions = json['user_permissions'] != null ? json['user_permissions'].cast<num>() : [];
+    userPermissions = json['user_permissions'] != null
+        ? json['user_permissions'].cast<num>()
+        : [];
   }
   num? id;
   String? username;
@@ -564,5 +571,4 @@ class User {
     map['user_permissions'] = userPermissions;
     return map;
   }
-
 }
