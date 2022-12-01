@@ -36,7 +36,6 @@ class PayMob {
     _integrationId = integrationID;
   }
 
-
   /// Inter this with your actual payment-key that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
@@ -93,31 +92,40 @@ class PayMob {
     _tokenModel = value;
   }
 
-  Future checkOut(BuildContext context,
-      {required OrderRequest orderRequest,required Function(String msg) onError,required Function(TransactionModel transactionModel) onSuccess}) async {
-    try{
+  Future checkOut(
+    BuildContext context, {
+    required OrderRequest orderRequest,
+    required Function(String msg) onError,
+    required Function(TransactionModel transactionModel) onSuccess,
+    Widget? loadingWidget,
+    Color? defaultBackgroundColor,
+  }) async {
+    try {
       await _getToken();
       await _order(orderRequest);
       await _payment();
-     var response = await showModalBottomSheet<dynamic>(
+      var response = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
-        builder: (context) {
+        builder: (ctx) {
           return SizedBox(
-            height: double.infinity,
+            height: double.maxFinite - 0.1,
+            width: double.maxFinite - 0.1,
             child: FlutterPaymentWeb(
               iframe: _iFrameCode.toString(),
               token: _paymentKeyResponse.token.toString(),
+              loadingWidget: loadingWidget,
+              backgroundColor: defaultBackgroundColor,
             ),
           );
         },
       );
-     if(response is TransactionModel){
-       onSuccess(response);
-     }else{
-      onError(response??'cancel');
-     }
-    }catch(e,s){
+      if (response is TransactionModel) {
+        onSuccess(response);
+      } else {
+        onError(response ?? 'cancel');
+      }
+    } catch (e, s) {
       Print.error(e, s);
       onError(e.toString());
     }
