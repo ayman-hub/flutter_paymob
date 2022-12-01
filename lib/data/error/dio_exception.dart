@@ -21,8 +21,7 @@ class DioExceptions implements Exception {
         break;
       case DioErrorType.response:
         try{
-          message = _handleError(
-              dioError.response!.statusCode, dioError.response?.data ?? {});
+          message = _handleError(dioError.response!.statusCode, dioError.response?.data ?? {});
         }catch(e,s){
           message = _handleError(
               dioError.response!.statusCode,{

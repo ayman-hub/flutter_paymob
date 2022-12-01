@@ -121,19 +121,17 @@ class DioHelper {
       String msg = '';
       String? code;
       String phone = '';
+      Print.warning(error);
       if (error is DioError) {
-        DioExceptions dioExceptions = DioExceptions.fromDioError(error);
-        msg = dioExceptions.message.toString();
-        if (dioExceptions.code != null) {
-          code = dioExceptions.code;
-          phone = dioExceptions.phone.toString();
-        }
+      /*  DioExceptions dioExceptions = DioExceptions.fromDioError(error);
+        msg = dioExceptions.message.toString();*/
+        return onError({MSG: error.response?.data});
       } else {
         Print.error(error.toString(), s);
         msg = error.toString();
       }
       Print.warning(msg);
-      return onError({MSG: msg, STATUS: 0, CODE: code, PHONE: phone});
+      return onError({MSG: error});
     }
   }
 

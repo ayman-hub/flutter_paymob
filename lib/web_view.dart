@@ -34,6 +34,7 @@ class FlutterPaymentWeb extends StatelessWidget {
               TransactionModel transactionModel = TransactionModel.fromJson(
                   Uri.tryParse(request.url)?.queryParameters);
               Print.info('transaction data:: ${transactionModel.toJson()}');
+              Navigator.pop(context,transactionModel);
             } catch (e, s) {
               Print.error(e, s);
             }

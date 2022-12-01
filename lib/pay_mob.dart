@@ -1,15 +1,21 @@
 library pay_mob;
 
+import 'package:flutter/material.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
+import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
+import 'package:pay_mob/data/model/TransactionModel.dart';
 import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
+import 'package:pay_mob/print_types.dart';
+import 'package:pay_mob/web_view.dart';
 
 import 'data/model/OrderResponse.dart';
 import 'data/model/TokenModel.dart';
 
 class PayMob {
   PayMob._();
+
   final Remote _remote = Remote(DioHelper());
 
   ///library [pay_mob] that you can use it for payment with paymob in flutter
@@ -30,8 +36,6 @@ class PayMob {
     _integrationId = integrationID;
   }
 
-  // Arbitrary number and used only in this activity. Change it as you wish.
-  static const int ACCEPT_PAYMENT_REQUEST = 10;
 
   /// Inter this with your actual payment-key that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
@@ -47,11 +51,15 @@ class PayMob {
     _paymentAuthKey = value;
   }
 
+  late PaymentKeyResponse _paymentKeyResponse;
+
   /// Inter this with your IframeCode that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
   late int _iFrameCode;
+
   int get iFrameCode => _iFrameCode;
+
   set iFrameCode(int value) {
     _iFrameCode = value;
   }
@@ -60,12 +68,15 @@ class PayMob {
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
   late int _integrationId;
+
   int get integrationId => _integrationId;
+
   set integrationId(int value) {
     _integrationId = value;
   }
 
   late OrderResponse _orderResponse;
+
   // just for debug at this moment
   OrderResponse get orderResponse => _orderResponse;
 
@@ -74,10 +85,42 @@ class PayMob {
   }
 
   late TokenModel _tokenModel;
+
   // just for debug at this moment
   TokenModel get tokenModel => _tokenModel;
+
   set tokenModel(TokenModel value) {
     _tokenModel = value;
+  }
+
+  Future checkOut(BuildContext context,
+      {required OrderRequest orderRequest,required Function(String msg) onError,required Function(TransactionModel transactionModel) onSuccess}) async {
+    try{
+      await _getToken();
+      await _order(orderRequest);
+      await _payment();
+     var response = await showModalBottomSheet<dynamic>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return SizedBox(
+            height: double.infinity,
+            child: FlutterPaymentWeb(
+              iframe: _iFrameCode.toString(),
+              token: _paymentKeyResponse.token.toString(),
+            ),
+          );
+        },
+      );
+     if(response is TransactionModel){
+       onSuccess(response);
+     }else{
+      onError(response??'cancel');
+     }
+    }catch(e,s){
+      Print.error(e, s);
+      onError(e.toString());
+    }
   }
 
   /// 1. Authentication Request:-
@@ -85,7 +128,7 @@ class PayMob {
   /// The Authentication request is an elementary step
   /// you should do before dealing with any of Accept's APIs.
   /// It is a post request with  your [paymentKey] found in your dashboard
-  Future<dynamic> getToken() async {
+  Future<dynamic> _getToken() async {
     return tokenModel = await _remote.token(paymentAuthKey);
   }
 
@@ -97,7 +140,8 @@ class PayMob {
   /// Order ID will be the identifier that
   /// you will use to link the transaction(s) performed to your system,
   /// as one order can have more than one transaction.
-  Future<dynamic> order(OrderRequest orderRequest) async {
+  Future<dynamic> _order(OrderRequest orderRequest) async {
+    orderRequest.authToken = tokenModel.token.toString();
     return orderResponse = await _remote.order(orderRequest);
   }
 
@@ -107,12 +151,12 @@ class PayMob {
   /// This key will be used to authenticate your payment request.
   /// It will be also used for verifying your transaction request metadata.
   /// return on Sucses [PaymentKeyResponse]
-  Future<dynamic> payment() {
+  Future<dynamic> _payment() async {
     PaymentKeyRequest paymentKeyRequest =
         PaymentKeyRequest.fromOrderResponse(_orderResponse)
           ..authToken = _tokenModel.token
           ..integrationId = integrationId;
 
-    return _remote.paymentKey(paymentKeyRequest);
+    return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
 }

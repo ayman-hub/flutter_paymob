@@ -19,6 +19,7 @@ class Remote {
     }, onSuccess: (Map<String, dynamic> data) {
       return TokenModel.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
+      throw(data[MSG]);
       Print.warning(' ${CustomConst.ApiErrorWord} $data');
       return data.values.first;
     }, formData: false);
@@ -32,6 +33,7 @@ class Remote {
         return OrderResponse.fromJson(data);
       },
       onError: (Map<String, dynamic> data) {
+        throw(data[MSG]);
         Print.warning('${CustomConst.ApiErrorWord} $data');
         return data.values.first;
       },
@@ -46,6 +48,7 @@ class Remote {
       return PaymentKeyResponse.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
       Print.warning('api error:: $data');
+      throw(data[MSG]);
       return data;
     }, formData: false);
   }

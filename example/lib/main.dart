@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
 import 'package:pay_mob/data/model/TokenModel.dart';
+import 'package:pay_mob/data/model/TransactionModel.dart';
 import 'package:pay_mob/pay_mob.dart';
 import 'package:pay_mob/print_types.dart';
 import 'package:pay_mob/web_view.dart';
@@ -20,25 +21,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late PayMob payMob;
-  String token = '';
-  int iframe = 435339;
-  final int _integrationId = 435339;
-  final _peymentkey =
-      'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpRM05ETXhMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuQmVHR0hLQ1NtN0RoZmVJWTlhNzU1RFRlSXM3T1dJQlZCLTlLVkRYelh0TWpoVDhkaW1tRzdsYW9mWTd3SE5CcWtiYmF4QjFSNFU5eWtMaGxtYXNHV2c=';
+
+
+
 
   @override
-  void initState() {
-    payMob = PayMob.init(
-      paymentKey: _peymentkey,
-      iframe: iframe,
-      integrationID: _integrationId,
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyHome()
     );
-    super.initState();
   }
+}
+
+class MyHome extends StatelessWidget {
+  MyHome({Key? key}) : super(key: key);
+  String token = '';
+  int iframe = 435339;
+  final int integrationId = 2448842;
+
+  final peymentkey =
+      'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpRM05ETXhMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuQmVHR0hLQ1NtN0RoZmVJWTlhNzU1RFRlSXM3T1dJQlZCLTlLVkRYelh0TWpoVDhkaW1tRzdsYW9mWTd3SE5CcWtiYmF4QjFSNFU5eWtMaGxtYXNHV2c=';
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> onTap() async {
+  Future<void> onTap(BuildContext context) async {
+    PayMob payMob = PayMob.init(paymentKey: peymentkey, iframe: iframe, integrationID: integrationId);
     // var data = await payMob.getToken();
     // Print.info('data:: $data');
     // if (data is TokenModel) {
@@ -60,11 +67,16 @@ class _MyAppState extends State<MyApp> {
     //     }
     //   }
     // }
-
-    await payMob.getToken();
+    OrderRequest request = createOrderWithFakeData();
+    payMob.checkOut(context,orderRequest: request, onError: (String msg) {
+      Print.warning("error msg:: $msg");
+    }, onSuccess: (TransactionModel transactionModel) {
+      Print.success(transactionModel.toJson());
+    });
+    /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
     //! createOrderWithFakeData
-    OrderRequest request = createOrderWithFakeData(payMob.tokenModel);
+
     await payMob.order(request);
     Print.info('d::: ${payMob.orderResponse}');
     var response = await payMob.payment();
@@ -72,21 +84,14 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         token = response.token.toString();
       });
-    }
+    }*/
 
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
   }
 
-  OrderRequest createOrderWithFakeData(TokenModel data) {
+  OrderRequest createOrderWithFakeData() {
     return OrderRequest(
       amountCents: 1.toString(),
-      authToken: data.token,
+      // authToken: data.token,
       deliveryNeeded: false.toString(),
       currency: 'EGP',
       merchantOrderId: DateTime.now().microsecond,
@@ -114,20 +119,15 @@ class _MyAppState extends State<MyApp> {
       ],
     );
   }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: token.isNotEmpty
-            ? FlutterPaymentWeb(
-                token: token,
-                iframe: payMob.iFrameCode.toString(),
-              )
-            : Center(
-                child: InkWell(onTap: onTap, child: const Text('Running on: ')),
-              ),
+    return Scaffold(
+      body: Center(
+        child: InkWell(
+            onTap: (){
+            onTap(context);
+            },
+            child: const Text('payment button')),
       ),
     );
   }
