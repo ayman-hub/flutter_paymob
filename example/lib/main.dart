@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
-import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
-import 'package:pay_mob/data/model/TokenModel.dart';
 import 'package:pay_mob/data/model/TransactionModel.dart';
 import 'package:pay_mob/pay_mob.dart';
 import 'package:pay_mob/print_types.dart';
-import 'package:pay_mob/web_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,16 +18,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHome()
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: MyHome());
   }
 }
 
@@ -45,7 +35,13 @@ class MyHome extends StatelessWidget {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> onTap(BuildContext context) async {
-    PayMob payMob = PayMob.init(paymentKey: peymentkey, iframe: iframe, integrationID: integrationId);
+    PayMob payMob = PayMob.init(
+      paymentKey: peymentkey,
+      iframe:PayMob.getIframeCodeFromIframeLink(
+        'https://accept.paymob.com/api/acceptance/iframe/435339?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVPREExTmpRM0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmxRQTJnTUlHUWJtSVBKZFdXaWtmZFg0V3plVkk0cUFCOUFXT0VTRkpNUGQ4V2RBT0FtRE1NX1pseTRBdEVOT21ZczRuNVB2OERVRC0zZmhFdEdXQlFR',
+      ),
+      integrationID: integrationId,
+    );
     // var data = await payMob.getToken();
     // Print.info('data:: $data');
     // if (data is TokenModel) {
@@ -68,7 +64,7 @@ class MyHome extends StatelessWidget {
     //   }
     // }
     OrderRequest request = createOrderWithFakeData();
-    payMob.checkOut(context,orderRequest: request, onError: (String msg) {
+    payMob.checkOut(context, orderRequest: request, onError: (String msg) {
       Print.warning("error msg:: $msg");
     }, onSuccess: (TransactionModel transactionModel) {
       Print.success(transactionModel.toJson());
@@ -85,7 +81,6 @@ class MyHome extends StatelessWidget {
         token = response.token.toString();
       });
     }*/
-
   }
 
   OrderRequest createOrderWithFakeData() {
@@ -119,13 +114,14 @@ class MyHome extends StatelessWidget {
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: InkWell(
-            onTap: (){
-            onTap(context);
+            onTap: () {
+              onTap(context);
             },
             child: const Text('payment button')),
       ),

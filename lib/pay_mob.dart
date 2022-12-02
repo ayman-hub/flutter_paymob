@@ -26,6 +26,10 @@ class PayMob {
   /// Inter this with your actual payment-key && iframe && integrationID that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
+  /// ---------------------------------------------
+  /// We have deliberately used the least possible number of approved packages
+  /// to ensure that they are compatible with all applications and with all versions of Flutter that include the update of the Null Safety,
+  /// in order to ensure that no problems occur.
   PayMob.init({
     required String paymentKey,
     required int iframe,
@@ -35,6 +39,31 @@ class PayMob {
     _iFrameCode = iframe;
     _integrationId = integrationID;
   }
+
+
+
+
+/// helper Method
+  /// TO Get IframeCode From IframeLink
+ static int getIframeCodeFromIframeLink(String link) {
+    if (link.isEmpty ||
+        !(link.contains("https://accept.paymob.com/api/acceptance/iframe/"))) {
+      return throw ErrorHint("Invalid Iframe Link");
+    } else {
+      link = link.split('/')[6].toString();
+      if (link.contains("?")) {
+        link = link.split("?")[0];
+      }
+
+      return int.parse(link);
+    }
+  }
+
+
+
+
+
+
 
   /// Inter this with your actual payment-key that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
@@ -54,10 +83,11 @@ class PayMob {
 
   /// Inter this with your IframeCode that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
-  ///
+  ///  [link Iframe] ex::
+  /// 'https://accept.paymob.com/api/acceptance/iframe/435339?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVPREExTmpRM0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmxRQTJnTUlHUWJtSVBKZFdXaWtmZFg0V3plVkk0cUFCOUFXT0VTRkpNUGQ4V2RBT0FtRE1NX1pseTRBdEVOT21ZczRuNVB2OERVRC0zZmhFdEdXQlFR'
+  ///   then code is :::  435339
+  /// Or Use getIframeCodeFromLink([link Iframe])
   late int _iFrameCode;
-
-  int get iFrameCode => _iFrameCode;
 
   set iFrameCode(int value) {
     _iFrameCode = value;
@@ -68,16 +98,11 @@ class PayMob {
   ///
   late int _integrationId;
 
-  int get integrationId => _integrationId;
-
   set integrationId(int value) {
     _integrationId = value;
   }
 
   late OrderResponse _orderResponse;
-
-  // just for debug at this moment
-  OrderResponse get orderResponse => _orderResponse;
 
   set orderResponse(OrderResponse value) {
     _orderResponse = value;
@@ -85,13 +110,15 @@ class PayMob {
 
   late TokenModel _tokenModel;
 
-  // just for debug at this moment
-  TokenModel get tokenModel => _tokenModel;
-
   set tokenModel(TokenModel value) {
     _tokenModel = value;
   }
 
+  /// this Only method can use for Payment Action
+  /// After init Data with init()
+  /// take context just for model bottom Sheet
+  /// in Error Case return The reason for the failure of the operation at [string] parameter
+  /// in Success Case return The Information Data of the operation at  [transactionModel] parameter
   Future checkOut(
     BuildContext context, {
     required OrderRequest orderRequest,
@@ -137,7 +164,7 @@ class PayMob {
   /// you should do before dealing with any of Accept's APIs.
   /// It is a post request with  your [paymentKey] found in your dashboard
   Future<dynamic> _getToken() async {
-    return tokenModel = await _remote.token(paymentAuthKey);
+    return _tokenModel = await _remote.token(paymentAuthKey);
   }
 
   /// Order Registration API:-
@@ -149,8 +176,8 @@ class PayMob {
   /// you will use to link the transaction(s) performed to your system,
   /// as one order can have more than one transaction.
   Future<dynamic> _order(OrderRequest orderRequest) async {
-    orderRequest.authToken = tokenModel.token.toString();
-    return orderResponse = await _remote.order(orderRequest);
+    orderRequest.authToken = _tokenModel.token.toString();
+    return _orderResponse = await _remote.order(orderRequest);
   }
 
   ///3. Payment Key Request
@@ -163,8 +190,10 @@ class PayMob {
     PaymentKeyRequest paymentKeyRequest =
         PaymentKeyRequest.fromOrderResponse(_orderResponse)
           ..authToken = _tokenModel.token
-          ..integrationId = integrationId;
+          ..integrationId = _integrationId;
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
 }
+
+
