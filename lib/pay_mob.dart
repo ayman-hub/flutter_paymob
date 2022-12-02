@@ -13,6 +13,12 @@ import 'package:pay_mob/web_view.dart';
 import 'data/model/OrderResponse.dart';
 import 'data/model/TokenModel.dart';
 
+// ------------------------\\
+// We have deliberately used the least possible number of Dependencies packages
+// to ensure that they are compatible with all applications
+// and with all versions of flutter that include the update of the Null Safety versions,
+// in order to ensure that no problems occur.
+
 class PayMob {
   PayMob._();
 
@@ -40,12 +46,9 @@ class PayMob {
     _integrationId = integrationID;
   }
 
-
-
-
-/// helper Method
+  /// helper Method
   /// TO Get IframeCode From IframeLink
- static int getIframeCodeFromIframeLink(String link) {
+  static int getIframeCodeFromIframeLink(String link) {
     if (link.isEmpty ||
         !(link.contains("https://accept.paymob.com/api/acceptance/iframe/"))) {
       return throw ErrorHint("Invalid Iframe Link");
@@ -54,69 +57,36 @@ class PayMob {
       if (link.contains("?")) {
         link = link.split("?")[0];
       }
-
+      // after split Operation
+      if (link.isEmpty) throw ErrorHint("Invalid Iframe Code In Link");
       return int.parse(link);
     }
   }
 
-
-
-
-
-
-
   /// Inter this with your actual payment-key that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
-  String get paymentAuthKey => _paymentAuthKey;
+  // String get paymentAuthKey => _paymentAuthKey;
 
   /// Inter this with your actual payment-key that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///
   late String _paymentAuthKey;
 
-  set paymentAuthKey(String value) {
-    _paymentAuthKey = value;
-  }
-
-  late PaymentKeyResponse _paymentKeyResponse;
-
   /// Inter this with your IframeCode that in paymob
   /// You Can Find  https://accept.paymob.com/portal2/en/settings
   ///  [link Iframe] ex::
   /// 'https://accept.paymob.com/api/acceptance/iframe/435339?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVPREExTmpRM0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmxRQTJnTUlHUWJtSVBKZFdXaWtmZFg0V3plVkk0cUFCOUFXT0VTRkpNUGQ4V2RBT0FtRE1NX1pseTRBdEVOT21ZczRuNVB2OERVRC0zZmhFdEdXQlFR'
   ///   then code is :::  435339
-  /// Or Use getIframeCodeFromLink([link Iframe])
+  /// Or Use static function getIframeCodeFromLink(link Iframe as [String])
   late int _iFrameCode;
 
-  set iFrameCode(int value) {
-    _iFrameCode = value;
-  }
-
-  /// Inter this with your IframeCode that in paymob
-  /// You Can Find  https://accept.paymob.com/portal2/en/settings
-  ///
+  //todo write info to get this Id
   late int _integrationId;
-
-  set integrationId(int value) {
-    _integrationId = value;
-  }
-
-  late OrderResponse _orderResponse;
-
-  set orderResponse(OrderResponse value) {
-    _orderResponse = value;
-  }
-
-  late TokenModel _tokenModel;
-
-  set tokenModel(TokenModel value) {
-    _tokenModel = value;
-  }
 
   /// this Only method can use for Payment Action
   /// After init Data with init()
-  /// take context just for model bottom Sheet
+  /// take context just for model bottom Sheet && required Order Information as [OrderRequest]
   /// in Error Case return The reason for the failure of the operation at [string] parameter
   /// in Success Case return The Information Data of the operation at  [transactionModel] parameter
   Future checkOut(
@@ -158,14 +128,18 @@ class PayMob {
     }
   }
 
+  late TokenModel _tokenModel;
+
   /// 1. Authentication Request:-
   /// _________________________________
   /// The Authentication request is an elementary step
   /// you should do before dealing with any of Accept's APIs.
   /// It is a post request with  your [paymentKey] found in your dashboard
   Future<dynamic> _getToken() async {
-    return _tokenModel = await _remote.token(paymentAuthKey);
+    return _tokenModel = await _remote.token(_paymentAuthKey);
   }
+
+  late OrderResponse _orderResponse;
 
   /// Order Registration API:-
   /// _________________________________
@@ -179,6 +153,8 @@ class PayMob {
     orderRequest.authToken = _tokenModel.token.toString();
     return _orderResponse = await _remote.order(orderRequest);
   }
+
+  late PaymentKeyResponse _paymentKeyResponse;
 
   ///3. Payment Key Request
   ///
@@ -195,5 +171,3 @@ class PayMob {
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
 }
-
-
