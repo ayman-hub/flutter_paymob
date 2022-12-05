@@ -105,14 +105,29 @@ class PayMob {
         context: context,
         isScrollControlled: true,
         builder: (ctx) {
-          return SizedBox(
-            height: double.maxFinite - 0.1,
-            width: double.maxFinite - 0.1,
-            child: FlutterPaymentWeb(
-              iframe: _iFrameCode.toString(),
-              token: _paymentKeyResponse.token.toString(),
-              loadingWidget: loadingWidget,
-              backgroundColor: defaultBackgroundColor,
+          double height = MediaQuery.of(context).size.height;
+          return DraggableScrollableSheet(
+            initialChildSize: 1.0,
+            minChildSize: 0.98,
+            maxChildSize: 1.0,
+            expand: true,
+            builder: (_, controller) => SizedBox(
+              height: height,
+              child: ListView(
+                shrinkWrap: true,
+                controller: controller,
+                children: [
+                  SizedBox(
+                    height: height * 2,
+                    child: FlutterPaymentWeb(
+                      iframe: _iFrameCode.toString(),
+                      token: _paymentKeyResponse.token.toString(),
+                      loadingWidget: loadingWidget,
+                      backgroundColor: defaultBackgroundColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
