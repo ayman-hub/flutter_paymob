@@ -47,5 +47,17 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
+<!-- 	NEW keys ****    -->
+
+
+
+<!-- <key>NSAppTransportSecurity</key>
+<dict>
+<key>NSALLowsArbitraryLoads</key>
+<true/>
+     -->
+
 </dict>
+
 </plist>
