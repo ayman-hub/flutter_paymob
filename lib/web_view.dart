@@ -31,45 +31,92 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
     String url =
         'https://accept.paymobsolutions.com/api/acceptance/iframes/${widget.iframe}?payment_token=${widget.token}';
 
-    return Stack(
-      children: [
-        WebView(
-          initialUrl: url,
-          javascriptMode: JavascriptMode.unrestricted,
-          allowsInlineMediaPlayback: true,
-          debuggingEnabled: true,
-          onProgress: (int progress) {
-            Print.info('WebView is loading (progress : $progress%)');
-          },
-          navigationDelegate: (NavigationRequest request) {
-            if (request.url.contains('updated')) {
-              try {
-                TransactionModel transactionModel = TransactionModel.fromJson(
-                    Uri.tryParse(request.url)?.queryParameters);
-                Print.info('transaction data:: ${transactionModel.toJson()}');
-                Navigator.pop(context, transactionModel);
-              } catch (e, s) {
-                Print.error(e, s);
-              }
-              return NavigationDecision.prevent;
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 2,
+      child: WebView(
+        initialUrl: url,
+        javascriptMode: JavascriptMode.unrestricted,
+        allowsInlineMediaPlayback: true,
+        debuggingEnabled: true,
+        onProgress: (int progress) {
+          Print.info('WebView is loading (progress : $progress%)');
+        },
+        navigationDelegate: (NavigationRequest request) {
+          if (request.url.contains('updated')) {
+            try {
+              TransactionModel transactionModel = TransactionModel.fromJson(
+                  Uri.tryParse(request.url)?.queryParameters);
+              Print.info('transaction data:: ${transactionModel.toJson()}');
+              Navigator.pop(context, transactionModel);
+            } catch (e, s) {
+              Print.error(e, s);
             }
-            Print.info('allowing navigation to $request');
-            return NavigationDecision.navigate;
-          },
-          onPageStarted: (String url) {
-            Print.info('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            Print.info('Page finished loading: $url');
-            Future.delayed(const Duration(milliseconds: 500), () {});
+            return NavigationDecision.prevent;
+          }
+          Print.info('allowing navigation to $request');
+          return NavigationDecision.navigate;
+        },
+        onPageStarted: (String url) {
+          Print.info('Page started loading: $url');
+        },
+        onPageFinished: (String url) {
+          Print.info('Page finished loading: $url');
+          Future.delayed(const Duration(milliseconds: 500), () {});
 
-            setState(() {
-              isLoading = false;
-            });
-          },
-          gestureNavigationEnabled: true,
-          zoomEnabled: true,
-          backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
+          setState(() {
+            isLoading = false;
+          });
+        },
+        gestureNavigationEnabled: true,
+        zoomEnabled: true,
+        backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
+      ),
+    );
+    return Stack(
+      fit: StackFit.loose,
+      children: [
+        ListView(
+          shrinkWrap: true,
+          children: [
+            WebView(
+              initialUrl: url,
+              javascriptMode: JavascriptMode.unrestricted,
+              allowsInlineMediaPlayback: true,
+              debuggingEnabled: true,
+              onProgress: (int progress) {
+                Print.info('WebView is loading (progress : $progress%)');
+              },
+              navigationDelegate: (NavigationRequest request) {
+                if (request.url.contains('updated')) {
+                  try {
+                    TransactionModel transactionModel = TransactionModel.fromJson(
+                        Uri.tryParse(request.url)?.queryParameters);
+                    Print.info('transaction data:: ${transactionModel.toJson()}');
+                    Navigator.pop(context, transactionModel);
+                  } catch (e, s) {
+                    Print.error(e, s);
+                  }
+                  return NavigationDecision.prevent;
+                }
+                Print.info('allowing navigation to $request');
+                return NavigationDecision.navigate;
+              },
+              onPageStarted: (String url) {
+                Print.info('Page started loading: $url');
+              },
+              onPageFinished: (String url) {
+                Print.info('Page finished loading: $url');
+                Future.delayed(const Duration(milliseconds: 500), () {});
+
+                setState(() {
+                  isLoading = false;
+                });
+              },
+              gestureNavigationEnabled: true,
+              zoomEnabled: true,
+              backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
+            ),
+          ],
         ),
         if (isLoading)
           widget.loadingWidget ??
