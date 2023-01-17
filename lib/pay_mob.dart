@@ -41,11 +41,12 @@ class PayMob {
   PayMob.init({
     required String paymentKey,
     required int iframe,
-    required int integrationID,
+    required int integrationIDCredit,int? integrationIdWallet,
   }) {
     _paymentAuthKey = paymentKey;
     _iFrameCode = iframe;
-    _integrationId = integrationID;
+    _integrationIdCredit = integrationIDCredit;
+    _integrationIdWallet = integrationIdWallet??0;
   }
 
   /// helper Method
@@ -84,7 +85,8 @@ class PayMob {
   late int _iFrameCode;
 
   //todo write info to get this Id
-  late int _integrationId;
+  late int _integrationIdCredit;
+  late int _integrationIdWallet;
 
   /// this Only method can use for Payment Action
   /// After init Data with init()
@@ -104,7 +106,7 @@ class PayMob {
       assert(paymentType == PaymentType.wallet && phone!.isNotEmpty,"you should add phone number if you choose wallet");
       await _getToken();
       await _order(orderRequest);
-      await _payment();
+      await _payment(paymentType);
       switch (paymentType) {
         case PaymentType.creditCard:
         /// do nothing
@@ -194,11 +196,11 @@ class PayMob {
   /// This key will be used to authenticate your payment request.
   /// It will be also used for verifying your transaction request metadata.
   /// return on Sucses [PaymentKeyResponse]
-  Future<dynamic> _payment() async {
+  Future<dynamic> _payment(PaymentType paymentType) async {
     PaymentKeyRequest paymentKeyRequest =
     PaymentKeyRequest.fromOrderResponse(_orderResponse)
       ..authToken = _tokenModel.token
-      ..integrationId = _integrationId;
+      ..integrationId = paymentType == PaymentType.creditCard?_integrationIdCredit:_integrationIdWallet;
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
