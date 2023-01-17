@@ -4,6 +4,7 @@ import 'package:pay_mob/data/model/OrderResponse.dart';
 import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
 import 'package:pay_mob/data/model/TokenModel.dart';
+import 'package:pay_mob/data/model/WalletResponse.dart';
 import 'package:pay_mob/print_types.dart';
 
 import 'dio_helper.dart';
@@ -20,8 +21,6 @@ class Remote {
       return TokenModel.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
       throw(data[MSG]);
-      Print.warning(' ${CustomConst.ApiErrorWord} $data');
-      return data.values.first;
     }, formData: false);
   }
 
@@ -34,8 +33,6 @@ class Remote {
       },
       onError: (Map<String, dynamic> data) {
         throw(data[MSG]);
-        Print.warning('${CustomConst.ApiErrorWord} $data');
-        return data.values.first;
       },
       formData: false,
     );
@@ -49,7 +46,24 @@ class Remote {
     }, onError: (Map<String, dynamic> data) {
       Print.warning('api error:: $data');
       throw(data[MSG]);
-      return data;
     }, formData: false);
+  }
+
+  Future<dynamic> walletMobile({required String phone, required String token})async{
+    return _helper.post(path: '/acceptance/payments/pay',
+        {
+          "source": {
+            "identifier": phone,
+            "subtype": "WALLET"
+          },
+          "payment_token": token,
+        },
+        onSuccess: (Map<String, dynamic> data) {
+          Print.success(data);
+          return WalletResponse.fromJson(data);
+        }, onError: (Map<String, dynamic> data) {
+          Print.warning('api error:: $data');
+          throw(data[MSG]);
+        }, formData: false);
   }
 }

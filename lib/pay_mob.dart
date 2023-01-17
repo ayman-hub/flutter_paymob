@@ -5,11 +5,13 @@ import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
 import 'package:pay_mob/data/model/TransactionModel.dart';
+import 'package:pay_mob/data/model/WalletResponse.dart';
 import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
 import 'package:pay_mob/print_types.dart';
 import 'package:pay_mob/web_view.dart';
 
+import 'data/constants/enums.dart';
 import 'data/model/OrderResponse.dart';
 import 'data/model/TokenModel.dart';
 
@@ -39,11 +41,12 @@ class PayMob {
   PayMob.init({
     required String paymentKey,
     required int iframe,
-    required int integrationID,
+    required int integrationIDCredit,int? integrationIdWallet,
   }) {
     _paymentAuthKey = paymentKey;
     _iFrameCode = iframe;
-    _integrationId = integrationID;
+    _integrationIdCredit = integrationIDCredit;
+    _integrationIdWallet = integrationIdWallet??0;
   }
 
   /// helper Method
@@ -82,53 +85,69 @@ class PayMob {
   late int _iFrameCode;
 
   //todo write info to get this Id
-  late int _integrationId;
+  late int _integrationIdCredit;
+  late int _integrationIdWallet;
 
   /// this Only method can use for Payment Action
   /// After init Data with init()
   /// take context just for model bottom Sheet && required Order Information as [OrderRequest]
   /// in Error Case return The reason for the failure of the operation at [string] parameter
   /// in Success Case return The Information Data of the operation at  [transactionModel] parameter
-  Future checkOut(
-    BuildContext context, {
+  Future checkOut(BuildContext context, {
     required OrderRequest orderRequest,
     required Function(String msg) onError,
     required Function(TransactionModel transactionModel) onSuccess,
+    required PaymentType paymentType,
     Widget? loadingWidget,
+    String? phone = '',
     Color? defaultBackgroundColor,
   }) async {
     try {
+      assert(paymentType == PaymentType.wallet && phone!.isNotEmpty,"you should add phone number if you choose wallet");
       await _getToken();
       await _order(orderRequest);
-      await _payment();
+      await _payment(paymentType);
+      switch (paymentType) {
+        case PaymentType.creditCard:
+        /// do nothing
+          break;
+        case PaymentType.wallet:
+          await _wallet(phone!);
+          break;
+      }
       var response = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
         builder: (ctx) {
-          double height = MediaQuery.of(context).size.height;
+          double height = MediaQuery
+              .of(context)
+              .size
+              .height;
           return DraggableScrollableSheet(
             initialChildSize: 1.0,
             minChildSize: 0.98,
             maxChildSize: 1.0,
             expand: true,
-            builder: (_, controller) => SizedBox(
-              height: height,
-              child: ListView(
-                shrinkWrap: true,
-                controller: controller,
-                children: [
-                  SizedBox(
-                    height: height * 2,
-                    child: FlutterPaymentWeb(
-                      iframe: _iFrameCode.toString(),
-                      token: _paymentKeyResponse.token.toString(),
-                      loadingWidget: loadingWidget,
-                      backgroundColor: defaultBackgroundColor,
-                    ),
+            builder: (_, controller) =>
+                SizedBox(
+                  height: height,
+                  child: ListView(
+                    shrinkWrap: true,
+                    controller: controller,
+                    children: [
+                      SizedBox(
+                        height: height * 2,
+                        child: FlutterPaymentWeb(
+                          url : _walletResponse?.iframeRedirectionUrl??"",
+                          iframe: _iFrameCode.toString(),
+                          token: _paymentKeyResponse.token.toString(),
+                          loadingWidget: loadingWidget,
+                          backgroundColor: defaultBackgroundColor,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
           );
         },
       );
@@ -177,12 +196,19 @@ class PayMob {
   /// This key will be used to authenticate your payment request.
   /// It will be also used for verifying your transaction request metadata.
   /// return on Sucses [PaymentKeyResponse]
-  Future<dynamic> _payment() async {
+  Future<dynamic> _payment(PaymentType paymentType) async {
     PaymentKeyRequest paymentKeyRequest =
-        PaymentKeyRequest.fromOrderResponse(_orderResponse)
-          ..authToken = _tokenModel.token
-          ..integrationId = _integrationId;
+    PaymentKeyRequest.fromOrderResponse(_orderResponse)
+      ..authToken = _tokenModel.token
+      ..integrationId = paymentType == PaymentType.creditCard?_integrationIdCredit:_integrationIdWallet;
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
+  }
+
+  late WalletResponse? _walletResponse;
+
+  Future<dynamic> _wallet(String phone) async {
+    return _walletResponse = await _remote.walletMobile(
+        phone: phone, token: _paymentKeyResponse.token ?? "");
   }
 }

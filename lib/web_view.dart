@@ -11,10 +11,11 @@ class FlutterPaymentWeb extends StatefulWidget {
     this.iframe = "435339",
     Key? key,
     this.loadingWidget,
-    this.backgroundColor
+    this.backgroundColor, this.url = ''
   }) : super(key: key);
   String token;
   String iframe;
+  String? url;
   Widget? loadingWidget;
   Color? backgroundColor;
 
@@ -28,8 +29,7 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
   @override
   Widget build(BuildContext context) {
 
-    String url =
-        'https://accept.paymobsolutions.com/api/acceptance/iframes/${widget.iframe}?payment_token=${widget.token}';
+    String url = widget.url?? 'https://accept.paymobsolutions.com/api/acceptance/iframes/${widget.iframe}?payment_token=${widget.token}';
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 2,
@@ -72,58 +72,61 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
         backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
       ),
     );
-    return Stack(
-      fit: StackFit.loose,
-      children: [
-        ListView(
-          shrinkWrap: true,
-          children: [
-            WebView(
-              initialUrl: url,
-              javascriptMode: JavascriptMode.unrestricted,
-              allowsInlineMediaPlayback: true,
-              debuggingEnabled: true,
-              onProgress: (int progress) {
-                Print.info('WebView is loading (progress : $progress%)');
-              },
-              navigationDelegate: (NavigationRequest request) {
-                if (request.url.contains('updated')) {
-                  try {
-                    TransactionModel transactionModel = TransactionModel.fromJson(
-                        Uri.tryParse(request.url)?.queryParameters);
-                    Print.info('transaction data:: ${transactionModel.toJson()}');
-                    Navigator.pop(context, transactionModel);
-                  } catch (e, s) {
-                    Print.error(e, s);
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 2,
+      child: Stack(
+        fit: StackFit.loose,
+        children: [
+          ListView(
+            shrinkWrap: true,
+            children: [
+              WebView(
+                initialUrl: url,
+                javascriptMode: JavascriptMode.unrestricted,
+                allowsInlineMediaPlayback: true,
+                debuggingEnabled: true,
+                onProgress: (int progress) {
+                  Print.info('WebView is loading (progress : $progress%)');
+                },
+                navigationDelegate: (NavigationRequest request) {
+                  if (request.url.contains('updated')) {
+                    try {
+                      TransactionModel transactionModel = TransactionModel.fromJson(
+                          Uri.tryParse(request.url)?.queryParameters);
+                      Print.info('transaction data:: ${transactionModel.toJson()}');
+                      Navigator.pop(context, transactionModel);
+                    } catch (e, s) {
+                      Print.error(e, s);
+                    }
+                    return NavigationDecision.prevent;
                   }
-                  return NavigationDecision.prevent;
-                }
-                Print.info('allowing navigation to $request');
-                return NavigationDecision.navigate;
-              },
-              onPageStarted: (String url) {
-                Print.info('Page started loading: $url');
-              },
-              onPageFinished: (String url) {
-                Print.info('Page finished loading: $url');
-                Future.delayed(const Duration(milliseconds: 500), () {});
+                  Print.info('allowing navigation to $request');
+                  return NavigationDecision.navigate;
+                },
+                onPageStarted: (String url) {
+                  Print.info('Page started loading: $url');
+                },
+                onPageFinished: (String url) {
+                  Print.info('Page finished loading: $url');
+                  Future.delayed(const Duration(milliseconds: 500), () {});
 
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              gestureNavigationEnabled: true,
-              zoomEnabled: true,
-              backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
-            ),
-          ],
-        ),
-        if (isLoading)
-          widget.loadingWidget ??
-              const Center(
-                child: CircularProgressIndicator.adaptive(),
-              )
-      ],
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
+                gestureNavigationEnabled: true,
+                zoomEnabled: true,
+                backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
+              ),
+            ],
+          ),
+          if (isLoading)
+            widget.loadingWidget ??
+                const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                )
+        ],
+      ),
     );
 
     return AnimatedCrossFade(
