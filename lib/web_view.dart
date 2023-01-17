@@ -11,7 +11,7 @@ class FlutterPaymentWeb extends StatefulWidget {
     this.iframe = "435339",
     Key? key,
     this.loadingWidget,
-    this.backgroundColor, this.url = ''
+    this.backgroundColor, this.url
   }) : super(key: key);
   String token;
   String iframe;

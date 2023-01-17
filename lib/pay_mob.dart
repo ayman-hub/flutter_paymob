@@ -141,7 +141,7 @@ class PayMob {
                       SizedBox(
                         height: height * 2,
                         child: FlutterPaymentWeb(
-                          url : _walletResponse?.iframeRedirectionUrl??"",
+                          url : _walletResponse?.iframeRedirectionUrl,
                           iframe: _iFrameCode.toString(),
                           token: _paymentKeyResponse.token.toString(),
                           loadingWidget: loadingWidget,
