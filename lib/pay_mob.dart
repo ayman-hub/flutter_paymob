@@ -132,7 +132,8 @@ class PayMob {
             maxChildSize: 1.0,
             expand: true,
             builder: (_, controller) =>
-                SizedBox(
+                Container(
+                  color: Colors.white,
                   height: height,
                   child: ListView(
                     shrinkWrap: true,
