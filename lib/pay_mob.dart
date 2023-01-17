@@ -103,7 +103,7 @@ class PayMob {
     Color? defaultBackgroundColor,
   }) async {
     try {
-      assert(paymentType == PaymentType.wallet && phone!.isNotEmpty,"you should add phone number if you choose wallet");
+      assert(paymentType == PaymentType.wallet && phone!.isNotEmpty&&_integrationIdWallet != 0,"you should add phone number if you choose wallet and integration_id wallet");
       await _getToken();
       await _order(orderRequest);
       await _payment(paymentType);
