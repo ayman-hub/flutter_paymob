@@ -208,7 +208,7 @@ class PayMob {
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
 
-  late WalletResponse? _walletResponse;
+  late WalletResponse? _walletResponse = WalletResponse();
 
   Future<dynamic> _wallet(String phone) async {
     return _walletResponse = await _remote.walletMobile(
