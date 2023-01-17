@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pay_mob/data/constants/enums.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/TransactionModel.dart';
 import 'package:pay_mob/pay_mob.dart';
@@ -28,7 +29,9 @@ class MyHome extends StatelessWidget {
   MyHome({Key? key}) : super(key: key);
   String token = '';
   int iframe = 435339;
-  final int integrationId = 2448842;
+  final int integrationIdCredit = 2448842;
+  final int integrationIdWallet = 3295425;
+  final int integrationIdKiosk = 3295424;
 
   final peymentkey =
       'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpRM05ETXhMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuQmVHR0hLQ1NtN0RoZmVJWTlhNzU1RFRlSXM3T1dJQlZCLTlLVkRYelh0TWpoVDhkaW1tRzdsYW9mWTd3SE5CcWtiYmF4QjFSNFU5eWtMaGxtYXNHV2c=';
@@ -40,7 +43,7 @@ class MyHome extends StatelessWidget {
       iframe:PayMob.getIframeCodeFromIframeLink(
         'https://accept.paymob.com/api/acceptance/iframe/435339?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVPREExTmpRM0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmxRQTJnTUlHUWJtSVBKZFdXaWtmZFg0V3plVkk0cUFCOUFXT0VTRkpNUGQ4V2RBT0FtRE1NX1pseTRBdEVOT21ZczRuNVB2OERVRC0zZmhFdEdXQlFR',
       ),
-      integrationID: integrationId,
+      integrationID: integrationIdWallet,
     );
     // var data = await payMob.getToken();
     // Print.info('data:: $data');
@@ -68,7 +71,7 @@ class MyHome extends StatelessWidget {
       Print.warning("error msg:: $msg");
     }, onSuccess: (TransactionModel transactionModel) {
       Print.success(transactionModel.toJson());
-    });
+    }, paymentType: PaymentType.wallet,phone: '01010101010');
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
     //! createOrderWithFakeData
