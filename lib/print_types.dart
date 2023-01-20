@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
+
 
 /*
 * this is all type of color
@@ -25,24 +25,18 @@ import 'package:flutter/foundation.dart';
 */
 class Print {
   static warning(msg) {
-    if (kDebugMode) {
       log(" $msg", name: 'WARNING 📙:');
    //   print("📙: \x1B[33m $msg \x1B[0m");
-    }
   }
 
   static info(msg) {
-    if (kDebugMode) {
       log('$msg', name: 'INFO 📘: ');
       //print('📘: \x1B[34m   $msg  \x1B[0m');
-    }
   }
 
   static success(msg) {
-    if (kDebugMode) {
       log(' $msg', name: 'SUCCESS 📗:');
       //  print('📗: \x1B[32m   $msg  \x1B[0m');
-    }
   }
 
   static error(msg, StackTrace stackTrace) {
