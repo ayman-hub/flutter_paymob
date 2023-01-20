@@ -12,7 +12,7 @@ import 'package:pay_mob/data/model/WalletResponse.dart';
 import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
 import 'package:pay_mob/print_types.dart';
-import 'package:pay_mob/web_view.dart';
+
 
 
 // ------------------------\\
