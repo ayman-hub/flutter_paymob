@@ -1,6 +1,5 @@
 library paymob_backend;
 
-import 'package:flutter/material.dart';
 import 'package:pay_mob/data/constants/enums.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/OrderResponse.dart';
@@ -54,14 +53,14 @@ class PayMob {
   static int getIframeCodeFromIframeLink(String link) {
     if (link.isEmpty ||
         !(link.contains("https://accept.paymob.com/api/acceptance/iframe/"))) {
-      return throw ErrorHint("Invalid Iframe Link");
+      return throw ("Invalid Iframe Link");
     } else {
       link = link.split('/')[6].toString();
       if (link.contains("?")) {
         link = link.split("?")[0];
       }
       // after split Operation
-      if (link.isEmpty) throw ErrorHint("Invalid Iframe Code In Link");
+      if (link.isEmpty) throw ("Invalid Iframe Code In Link");
       return int.parse(link);
     }
   }
@@ -93,14 +92,12 @@ class PayMob {
   /// take context just for model bottom Sheet && required Order Information as [OrderRequest]
   /// in Error Case return The reason for the failure of the operation at [string] parameter
   /// in Success Case return The Information Data of the operation at  [transactionModel] parameter
-  Future checkOut(BuildContext context, {
+  Future checkOut({
     required OrderRequest orderRequest,
     required Function(String msg) onError,
     required Function(TransactionModel transactionModel) onSuccess,
     required PaymentType paymentType,
-    Widget? loadingWidget,
     String? phone = '',
-    Color? defaultBackgroundColor,
   }) async {
     try {
       if(paymentType == PaymentType.wallet){
