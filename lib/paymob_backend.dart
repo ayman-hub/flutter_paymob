@@ -105,7 +105,16 @@ class PayMob {
         "you should add phone number if you choose wallet and integration_id wallet");
       }
       await _getToken();
-      await _order(orderRequest);
+      try{
+        await _order(orderRequest);
+      }catch(e,s){
+        Print.error(e, s);
+        if(e.toString().contains('duplicate')){
+          /// do nothing
+        }else{
+          rethrow;
+        }
+      }
       await _payment(paymentType);
       switch (paymentType) {
         case PaymentType.creditCard:
