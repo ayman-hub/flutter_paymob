@@ -95,7 +95,7 @@ class PayMob {
   Future checkOut({
     required OrderRequest orderRequest,
     required Function(String msg) onError,
-    required Function(TransactionModel transactionModel) onSuccess,
+    required Function(String? merchantOrderId) onSuccess,
     required PaymentType paymentType,
     String? phone = '',
   }) async {
@@ -107,6 +107,7 @@ class PayMob {
       await _getToken();
       try{
         await _order(orderRequest);
+        onSuccess(_orderResponse.merchantOrderId);
       }catch(e,s){
         Print.error(e, s);
         if(e.toString().contains('duplicate')){
