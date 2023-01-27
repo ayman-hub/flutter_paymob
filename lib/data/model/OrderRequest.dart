@@ -8,15 +8,18 @@
 
 class OrderRequest {
   OrderRequest({
-      this.authToken, 
-      this.deliveryNeeded, 
-      this.amountCents, 
-      this.currency, 
-      this.merchantOrderId, 
-      this.items, 
-      this.shippingData,});
+    this.id,
+    this.authToken,
+    this.deliveryNeeded,
+    this.amountCents,
+    this.currency,
+    this.merchantOrderId,
+    this.items,
+    this.shippingData,
+  });
 
   OrderRequest.fromJson(dynamic json) {
+    id = json['id'];
     authToken = json['auth_token'];
     deliveryNeeded = json['delivery_needed'];
     amountCents = json['amount_cents'];
@@ -28,8 +31,12 @@ class OrderRequest {
         items?.add(Items.fromJson(v));
       });
     }
-    shippingData = json['shipping_data'] != null ? ShippingData.fromJson(json['shipping_data']) : null;
+    shippingData = json['shipping_data'] != null
+        ? ShippingData.fromJson(json['shipping_data'])
+        : null;
   }
+
+  num? id;
   String? authToken;
   String? deliveryNeeded;
   String? amountCents;
@@ -53,7 +60,6 @@ class OrderRequest {
     }
     return map;
   }
-
 }
 
 /// apartment : "803"
@@ -70,22 +76,22 @@ class OrderRequest {
 /// last_name : "ayman"
 /// state : "Utah"
 
-
 class ShippingData {
   ShippingData({
-      this.apartment, 
-      this.email, 
-      this.floor, 
-      this.firstName, 
-      this.street, 
-      this.building, 
-      this.phoneNumber, 
-      this.postalCode, 
-      this.extraDescription, 
-      this.city, 
-      this.country, 
-      this.lastName, 
-      this.state,});
+    this.apartment,
+    this.email,
+    this.floor,
+    this.firstName,
+    this.street,
+    this.building,
+    this.phoneNumber,
+    this.postalCode,
+    this.extraDescription,
+    this.city,
+    this.country,
+    this.lastName,
+    this.state,
+  });
 
   ShippingData.fromJson(dynamic json) {
     apartment = json['apartment'];
@@ -102,6 +108,7 @@ class ShippingData {
     lastName = json['last_name'];
     state = json['state'];
   }
+
   String? apartment;
   String? email;
   String? floor;
@@ -133,7 +140,6 @@ class ShippingData {
     map['state'] = state;
     return map;
   }
-
 }
 
 /// name : "ASC1515"
@@ -143,10 +149,11 @@ class ShippingData {
 
 class Items {
   Items({
-      this.name, 
-      this.amountCents, 
-      this.description, 
-      this.quantity,});
+    this.name,
+    this.amountCents,
+    this.description,
+    this.quantity,
+  });
 
   Items.fromJson(dynamic json) {
     name = json['name'];
@@ -154,6 +161,7 @@ class Items {
     description = json['description'];
     quantity = json['quantity'];
   }
+
   String? name;
   int? amountCents;
   String? description;
@@ -167,5 +175,4 @@ class Items {
     map['quantity'] = quantity;
     return map;
   }
-
 }

@@ -62,7 +62,7 @@ class PaymentKeyRequest {
   static PaymentKeyRequest fromOrderResponse(dynamic data) {
     return PaymentKeyRequest(
       amountCents: data.amountCents.toString(),
-      orderId: data.merchantOrderId.toString(),
+      orderId: data.id.toString(),
       expiration: 3600,
       currency: data.currency,
       billingData: BillingData.fromJson(data.shippingData?.toJson() ?? {}),
