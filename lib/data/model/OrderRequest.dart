@@ -47,6 +47,7 @@ class OrderRequest {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['id'] = id;
     map['auth_token'] = authToken;
     map['delivery_needed'] = deliveryNeeded;
     map['amount_cents'] = amountCents;
