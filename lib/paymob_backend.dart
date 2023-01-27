@@ -12,8 +12,6 @@ import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
 import 'package:pay_mob/print_types.dart';
 
-
-
 // ------------------------\\
 // We have deliberately used the least possible number of Dependencies packages
 // to ensure that they are compatible with all applications
@@ -40,12 +38,13 @@ class PayMob {
   PayMob.init({
     required String paymentKey,
     required int iframe,
-    required int integrationIDCredit,int? integrationIdWallet,
+    required int integrationIDCredit,
+    int? integrationIdWallet,
   }) {
     _paymentAuthKey = paymentKey;
     _iFrameCode = iframe;
     _integrationIdCredit = integrationIDCredit;
-    _integrationIdWallet = integrationIdWallet??0;
+    _integrationIdWallet = integrationIdWallet ?? 0;
   }
 
   /// helper Method
@@ -100,33 +99,37 @@ class PayMob {
     String? phone = '',
   }) async {
     try {
-      if(paymentType == PaymentType.wallet){
+      if (paymentType == PaymentType.wallet) {
         assert(phone!.isNotEmpty && _integrationIdWallet != 0,
-        "you should add phone number if you choose wallet and integration_id wallet");
+            "you should add phone number if you choose wallet and integration_id wallet");
       }
       await _getToken();
-      try{
+      try {
+        if (orderRequest.id != null) {
+          throw ('duplicate');
+        }
         await _order(orderRequest);
         onSuccess(_orderResponse.merchantOrderId);
-      }catch(e,s){
+      } catch (e, s) {
         Print.error(e, s);
-        if(e.toString().contains('duplicate')){
-          paymentKeyRequest =
-              PaymentKeyRequest.fromOrderResponse(orderRequest);
-        }else{
+        if (e.toString().contains('duplicate')) {
+          paymentKeyRequest = PaymentKeyRequest.fromOrderResponse(orderRequest);
+        } else {
           rethrow;
         }
       }
       await _payment(paymentType);
       switch (paymentType) {
         case PaymentType.creditCard:
-        /// do nothing
+
+          /// do nothing
           break;
         case PaymentType.wallet:
           await _wallet(phone!);
           break;
       }
-      return _walletResponse?.redirectUrl?? 'https://accept.paymobsolutions.com/api/acceptance/iframes/$_iFrameCode?payment_token=${_paymentKeyResponse.token}';
+      return _walletResponse?.redirectUrl ??
+          'https://accept.paymobsolutions.com/api/acceptance/iframes/$_iFrameCode?payment_token=${_paymentKeyResponse.token}';
     } catch (e, s) {
       Print.error(e, s);
       onError(e.toString());
@@ -156,9 +159,8 @@ class PayMob {
   /// as one order can have more than one transaction.
   Future<dynamic> _order(OrderRequest orderRequest) async {
     orderRequest.authToken = _tokenModel.token.toString();
-     _orderResponse = await _remote.order(orderRequest);
-    paymentKeyRequest =
-        PaymentKeyRequest.fromOrderResponse(_orderResponse);
+    _orderResponse = await _remote.order(orderRequest);
+    paymentKeyRequest = PaymentKeyRequest.fromOrderResponse(_orderResponse);
     return _orderResponse;
   }
 
@@ -170,11 +172,14 @@ class PayMob {
   /// This key will be used to authenticate your payment request.
   /// It will be also used for verifying your transaction request metadata.
   /// return on Sucses [PaymentKeyResponse]
-     late  PaymentKeyRequest paymentKeyRequest ;
-  Future<dynamic> _payment(PaymentType paymentType) async {
+  late PaymentKeyRequest paymentKeyRequest;
 
-     paymentKeyRequest ..authToken = _tokenModel.token
-      ..integrationId = paymentType == PaymentType.creditCard?_integrationIdCredit:_integrationIdWallet;
+  Future<dynamic> _payment(PaymentType paymentType) async {
+    paymentKeyRequest
+      ..authToken = _tokenModel.token
+      ..integrationId = paymentType == PaymentType.creditCard
+          ? _integrationIdCredit
+          : _integrationIdWallet;
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
