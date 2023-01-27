@@ -110,7 +110,8 @@ class PayMob {
       }catch(e,s){
         Print.error(e, s);
         if(e.toString().contains('duplicate')){
-          /// do nothing
+          paymentKeyRequest =
+              PaymentKeyRequest.fromOrderResponse(orderRequest);
         }else{
           rethrow;
         }
@@ -154,7 +155,10 @@ class PayMob {
   /// as one order can have more than one transaction.
   Future<dynamic> _order(OrderRequest orderRequest) async {
     orderRequest.authToken = _tokenModel.token.toString();
-    return _orderResponse = await _remote.order(orderRequest);
+     _orderResponse = await _remote.order(orderRequest);
+    paymentKeyRequest =
+        PaymentKeyRequest.fromOrderResponse(_orderResponse);
+    return _orderResponse;
   }
 
   late PaymentKeyResponse _paymentKeyResponse;
@@ -165,10 +169,10 @@ class PayMob {
   /// This key will be used to authenticate your payment request.
   /// It will be also used for verifying your transaction request metadata.
   /// return on Sucses [PaymentKeyResponse]
+     late  PaymentKeyRequest paymentKeyRequest ;
   Future<dynamic> _payment(PaymentType paymentType) async {
-    PaymentKeyRequest paymentKeyRequest =
-    PaymentKeyRequest.fromOrderResponse(_orderResponse)
-      ..authToken = _tokenModel.token
+
+     paymentKeyRequest ..authToken = _tokenModel.token
       ..integrationId = paymentType == PaymentType.creditCard?_integrationIdCredit:_integrationIdWallet;
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);

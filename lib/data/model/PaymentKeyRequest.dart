@@ -1,3 +1,4 @@
+import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/OrderResponse.dart';
 
 /// auth_token : "ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVOekk0Tmpnd0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmNhYnhrcFZvV1dHQnFVcHJ5SkxnQWRXVmtKTXVtZG9tX1ZUMEd6UDRETnZ3QVpPdm1aUVJ6emtLRDJUMFlZMjdvTFJHZFNSS0k0aVBscjJIc1ZHOXRB"
@@ -58,10 +59,10 @@ class PaymentKeyRequest {
     return map;
   }
 
-  static PaymentKeyRequest fromOrderResponse(OrderResponse data) {
+  static PaymentKeyRequest fromOrderResponse(dynamic data) {
     return PaymentKeyRequest(
       amountCents: data.amountCents.toString(),
-      orderId: data.id.toString(),
+      orderId: data.merchantOrderId.toString(),
       expiration: 3600,
       currency: data.currency,
       billingData: BillingData.fromJson(data.shippingData?.toJson() ?? {}),

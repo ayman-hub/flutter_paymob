@@ -1,4 +1,5 @@
 import 'package:pay_mob/data/model/OrderRequest.dart';
+import 'package:pay_mob/print_types.dart';
 
 /// id : 82012120
 /// created_at : "2022-11-21T14:07:30.368204"
@@ -63,10 +64,15 @@ class OrderResponse {
   OrderResponse.fromJson(dynamic json) {
     id = json['id'];
     createdAt = json['created_at'];
-    deliveryNeeded = json['delivery_needed'];
+    try{
+      deliveryNeeded = bool.fromEnvironment(json['delivery_needed'].toString());
+    }catch(e,s){
+      deliveryNeeded = false;
+      Print.error(e, s);
+    }
     merchant = json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     collector = json['collector'];
-    amountCents = json['amount_cents'];
+    amountCents = num.tryParse(json['amount_cents'].toString());
     shippingData = json['shipping_data'] != null ? ResponseShippingData.fromJson(json['shipping_data']) : null;
     currency = json['currency'];
     isPaymentLocked = json['is_payment_locked'];
@@ -74,7 +80,7 @@ class OrderResponse {
     isCancel = json['is_cancel'];
     isReturned = json['is_returned'];
     isCanceled = json['is_canceled'];
-    merchantOrderId = json['merchant_order_id'];
+    merchantOrderId = json['merchant_order_id'].toString();
     walletNotification = json['wallet_notification'];
     paidAmountCents = json['paid_amount_cents'];
     notifyUserWithEmail = json['notify_user_with_email'];
