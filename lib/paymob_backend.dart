@@ -103,13 +103,23 @@ class PayMob {
         assert(phone!.isNotEmpty && _integrationIdWallet != 0,
             "you should add phone number if you choose wallet and integration_id wallet");
       }
-      await _getToken();
+      try{
+        await _getToken();
+      }catch(e,s){
+        Print.error(e, s);
+        rethrow;
+      }
       try {
         if (orderRequest.id != null) {
           throw ('duplicate');
         }
-        await _order(orderRequest);
-        onSuccess(_orderResponse.merchantOrderId);
+        try{
+          await _order(orderRequest);
+          onSuccess(_orderResponse.merchantOrderId);
+        }catch(e,s){
+          Print.error(e, s);
+          rethrow;
+        }
       } catch (e, s) {
         Print.error(e, s);
         if (e.toString().contains('duplicate')) {
@@ -119,7 +129,12 @@ class PayMob {
           rethrow;
         }
       }
-      await _payment(paymentType);
+      try{
+        await _payment(paymentType);
+      }catch(e,s){
+        Print.error(e, s);
+        rethrow;
+      }
       switch (paymentType) {
         case PaymentType.creditCard:
 
