@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pay_mob/data/constants/enums.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/TransactionModel.dart';
-import 'package:pay_mob/pay_mob.dart';
+import 'package:pay_mob/paymob_backend.dart';
 import 'package:pay_mob/print_types.dart';
 
 
@@ -67,10 +67,10 @@ class MyHome extends StatelessWidget {
     //   }
     // }
     OrderRequest request = createOrderWithFakeData();
-    payMob.checkOut(context, orderRequest: request, onError: (String msg) {
+    payMob.checkOut(/*context, */orderRequest: request, onError: (String msg) {
       Print.warning("error msg:: $msg");
-    }, onSuccess: (TransactionModel transactionModel) {
-      Print.success(transactionModel.toJson());
+    }, onSuccess: (var transactionModel) {
+     // Print.success(transactionModel.toJson());
     }, paymentType: PaymentType.creditCard,phone: '01010101010');
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
@@ -88,33 +88,28 @@ class MyHome extends StatelessWidget {
 
   OrderRequest createOrderWithFakeData() {
     return OrderRequest(
-      amountCents: 1.toString(),
+      amountCents: 3000.toString(),
       // authToken: data.token,
       deliveryNeeded: false.toString(),
       currency: 'EGP',
-      merchantOrderId: 95378047,
+      merchantOrderId: 6910,
+      id: 6910,
       shippingData: ShippingData(
         email: 'ayman.atef65@yahoo.com',
         apartment: 'apartment',
         building: 'building',
-        city: 'cairo',
-        country: 'egypt',
+        city: 'الإسكندرية',
+        country: 'مصر',
         extraDescription: 'this is the extra description',
         firstName: 'ayman',
-        lastName: 'atef',
+        lastName: 'ayman',
         phoneNumber: '01002454688',
-        state: 'street',
-        postalCode: '21354',
-        floor: 'floor',
-        street: 'street',
+        state: 'شارع احمد قمحه',
+        postalCode: '1234',
+        floor: 'كلية الهندسة ، جامعة الإسكندرية, شارع احمد قمحه, إبراهيمية, الإسكندرية, 21544, مصر',
+        street: 'شارع احمد قمحه',
       ),
-      items: <Items>[
-        Items(
-            amountCents: 1,
-            name: 'label',
-            quantity: 1,
-            description: 'this is item description')
-      ],
+      items: <Items>[],
     );
   }
 

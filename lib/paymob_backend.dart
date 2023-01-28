@@ -114,6 +114,7 @@ class PayMob {
         Print.error(e, s);
         if (e.toString().contains('duplicate')) {
           paymentKeyRequest = PaymentKeyRequest.fromOrderResponse(orderRequest);
+          paymentKeyRequest.hasMerchantOrderId = true;
         } else {
           rethrow;
         }
@@ -180,6 +181,7 @@ class PayMob {
       ..integrationId = paymentType == PaymentType.creditCard
           ? _integrationIdCredit
           : _integrationIdWallet;
+    Print.info(paymentKeyRequest.toJson());
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
