@@ -94,7 +94,7 @@ class PayMob {
   Future checkOut({
     required OrderRequest orderRequest,
     required Function(String msg) onError,
-    required Function(String? merchantOrderId) onSuccess,
+    required Function(PaymentKeyRequest? paymentRequestKey) onSuccess,
     required PaymentType paymentType,
     String? phone = '',
   }) async {
@@ -116,7 +116,7 @@ class PayMob {
         try{
           await _order(orderRequest);
           paymentKeyRequest.hasMerchantOrderId = false;
-          onSuccess(_orderResponse.merchantOrderId);
+          onSuccess(paymentKeyRequest);
         }catch(e,s){
           Print.error(e, s);
           rethrow;
