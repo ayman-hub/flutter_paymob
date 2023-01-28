@@ -115,6 +115,7 @@ class PayMob {
         }
         try{
           await _order(orderRequest);
+          paymentKeyRequest.hasMerchantOrderId = false;
           onSuccess(_orderResponse.merchantOrderId);
         }catch(e,s){
           Print.error(e, s);
