@@ -166,6 +166,57 @@ class PayMob {
     }
   }
 
+ Future paymentWeb(BuildContext context,String url, {
+    required Function(String msg) onError,
+    required Function(TransactionModel transactionModel) onSuccess,
+    Widget? loadingWidget,
+    Color? defaultBackgroundColor,
+  }) async {
+   try{
+      var response = await showModalBottomSheet<dynamic>(
+        context: context,
+        isScrollControlled: true,
+        builder: (ctx) {
+          double height = MediaQuery.of(context).size.height;
+          return DraggableScrollableSheet(
+            initialChildSize: 1.0,
+            minChildSize: 0.98,
+            maxChildSize: 1.0,
+            expand: true,
+            builder: (_, controller) => Container(
+              color: Colors.white,
+              height: height,
+              child: ListView(
+                shrinkWrap: true,
+                controller: controller,
+                children: [
+                  SizedBox(
+                    height: height * 2,
+                    child: FlutterPaymentWeb(
+                      url: url,
+                      iframe: '',
+                      token: '',
+                      loadingWidget: loadingWidget,
+                      backgroundColor: defaultBackgroundColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+      if (response is TransactionModel) {
+        onSuccess(response);
+      } else {
+        onError(response ?? 'cancel');
+      }
+    }catch(e,s){
+     Print.error(e, s);
+     onError(e.toString());
+   }
+  }
+
   late TokenModel _tokenModel;
 
   /// 1. Authentication Request:-

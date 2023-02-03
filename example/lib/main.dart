@@ -71,7 +71,7 @@ class MyHome extends StatelessWidget {
       Print.warning("error msg:: $msg");
     }, onSuccess: (var transactionModel) {
      // Print.success(transactionModel.toJson());
-    }, paymentType: PaymentType.creditCard,phone: '01010101010');
+    }, paymentType: PaymentType.wallet,phone: '01010101010');
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
     //! createOrderWithFakeData
@@ -92,7 +92,7 @@ class MyHome extends StatelessWidget {
       // authToken: data.token,
       deliveryNeeded: false.toString(),
       currency: 'EGP',
-      merchantOrderId: 6910,
+      merchantOrderId: 2165454,
       id: null,
       shippingData: ShippingData(
         email: 'ayman.atef65@yahoo.com',
