@@ -11,13 +11,14 @@ class FlutterPaymentWeb extends StatefulWidget {
     this.iframe = "435339",
     Key? key,
     this.loadingWidget,
-    this.backgroundColor, this.url
+    this.backgroundColor, this.url,this.parameter
   }) : super(key: key);
   String token;
   String iframe;
   String? url;
   Widget? loadingWidget;
   Color? backgroundColor;
+  String? parameter;
 
   @override
   State<FlutterPaymentWeb> createState() => _FlutterPaymentWebState();
@@ -42,16 +43,15 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
           Print.info('WebView is loading (progress : $progress%)');
         },
         navigationDelegate: (NavigationRequest request) {
-          if (request.url.contains('updated')) {
+          Print.info('request::${request.toString()}');
+          if (request.url.contains(widget.parameter??'status')) {
             try {
-              TransactionModel transactionModel = TransactionModel.fromJson(
-                  Uri.tryParse(request.url)?.queryParameters);
-              Print.info('transaction data:: ${transactionModel.toJson()}');
-              Navigator.pop(context, transactionModel);
+              Print.info('request::${request.toString()}');
+              Navigator.pop(context, Uri.tryParse(request.url)?.queryParameters);
             } catch (e, s) {
               Print.error(e, s);
             }
-            return NavigationDecision.prevent;
+           // return NavigationDecision.prevent;
           }
           Print.info('allowing navigation to $request');
           return NavigationDecision.navigate;

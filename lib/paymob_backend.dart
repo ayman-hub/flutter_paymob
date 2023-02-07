@@ -110,9 +110,9 @@ class PayMob {
         rethrow;
       }
       try {
-        if (orderRequest.id != null) {
+        /*if (orderRequest.id != null) {
           throw ('duplicate');
-        }
+        }*/
         try{
           await _order(orderRequest);
           paymentKeyRequest.hasMerchantOrderId = false;

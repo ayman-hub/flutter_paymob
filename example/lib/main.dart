@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pay_mob/data/constants/enums.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/TransactionModel.dart';
-import 'package:pay_mob/paymob_backend.dart';
+//import 'package:pay_mob/paymob_backend.dart';
+import 'package:pay_mob/pay_mob.dart';
 import 'package:pay_mob/print_types.dart';
 
 
@@ -67,10 +68,10 @@ class MyHome extends StatelessWidget {
     //   }
     // }
     OrderRequest request = createOrderWithFakeData();
-    payMob.checkOut(/*context, */orderRequest: request, onError: (String msg) {
+    payMob.checkOut(context, orderRequest: request, onError: (String msg) {
       Print.warning("error msg:: $msg");
-    }, onSuccess: (var transactionModel) {
-     // Print.success(transactionModel.toJson());
+    }, onSuccess: (var map) {
+      Print.success(map);
     }, paymentType: PaymentType.wallet,phone: '01010101010');
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
@@ -92,8 +93,8 @@ class MyHome extends StatelessWidget {
       // authToken: data.token,
       deliveryNeeded: false.toString(),
       currency: 'EGP',
-      merchantOrderId: 2165454,
-      id: null,
+      merchantOrderId: 216231221,
+      //id: 9265545455,
       shippingData: ShippingData(
         email: 'ayman.atef65@yahoo.com',
         apartment: 'apartment',

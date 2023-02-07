@@ -96,7 +96,7 @@ class PayMob {
   Future checkOut(BuildContext context, {
     required OrderRequest orderRequest,
     required Function(String msg) onError,
-    required Function(TransactionModel transactionModel) onSuccess,
+    required Function(Map map) onSuccess,
     required PaymentType paymentType,
     Widget? loadingWidget,
     String? phone = '',
@@ -155,7 +155,7 @@ class PayMob {
           );
         },
       );
-      if (response is TransactionModel) {
+      if (response is Map) {
         onSuccess(response);
       } else {
         onError(response ?? 'cancel');
@@ -168,7 +168,7 @@ class PayMob {
 
  Future paymentWeb(BuildContext context,String url, {
     required Function(String msg) onError,
-    required Function(TransactionModel transactionModel) onSuccess,
+    required Function(Map? map) onSuccess,
     Widget? loadingWidget,
     Color? defaultBackgroundColor,
   }) async {
@@ -206,7 +206,7 @@ class PayMob {
           );
         },
       );
-      if (response is TransactionModel) {
+      if (response is Map) {
         onSuccess(response);
       } else {
         onError(response ?? 'cancel');
