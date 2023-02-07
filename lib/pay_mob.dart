@@ -171,6 +171,7 @@ class PayMob {
     required Function(Map? map) onSuccess,
     Widget? loadingWidget,
     Color? defaultBackgroundColor,
+   String? parameter
   }) async {
    try{
       var response = await showModalBottomSheet<dynamic>(
@@ -196,6 +197,7 @@ class PayMob {
                       url: url,
                       iframe: '',
                       token: '',
+                      parameter: parameter,
                       loadingWidget: loadingWidget,
                       backgroundColor: defaultBackgroundColor,
                     ),
