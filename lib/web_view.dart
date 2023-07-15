@@ -46,10 +46,10 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
             onProgress: (int value) {
               Print.info('WebView is loading (progress : $value%)');
               setState(() {
-                if(value <= 99){
-                  showProgress = true;
-                }else{
+                if(value >= 99){
                   showProgress = false;
+                }else{
+                  showProgress = true;
                 }
                 progress = value.toDouble();
               });
@@ -82,7 +82,7 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
             zoomEnabled: true,
             backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
           ),
-          isLoading?progressWidget():Container()
+          showProgress?progressWidget():Container()
         ],
       ),
     );
