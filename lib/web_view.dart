@@ -35,7 +35,7 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
     String url = widget.url?? 'https://accept.paymobsolutions.com/api/acceptance/iframes/${widget.iframe}?payment_token=${widget.token}';
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height/* * 2*/,
+      height: MediaQuery.of(context).size.height,
       child: Stack(
         children: [
           WebView(

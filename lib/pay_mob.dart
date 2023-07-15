@@ -176,21 +176,20 @@ class PayMob {
         isDismissible: false,
         builder: (ctx) {
           double height = MediaQuery.of(context).size.height;
-          return Container(
-            color: Colors.white,
-            height: height,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: const Icon(Icons.cancel,color: Colors.black,size: 30,)),
-                ),
-                SizedBox(
-                  height: height * 2,
-                  child: FlutterPaymentWeb(
+          return SafeArea(
+            child: Container(
+              color: Colors.white,
+              height: height,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(onPressed: (){
+                      Navigator.pop(context);
+                    }, icon: const Icon(Icons.cancel,color: Colors.black,size: 30,)),
+                  ),
+                  FlutterPaymentWeb(
                     url: url,
                     iframe: '',
                     token: '',
@@ -198,8 +197,8 @@ class PayMob {
                     loadingWidget: loadingWidget,
                     backgroundColor: defaultBackgroundColor,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
