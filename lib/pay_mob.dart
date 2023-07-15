@@ -126,32 +126,28 @@ class PayMob {
               .of(context)
               .size
               .height;
-          return DraggableScrollableSheet(
-            initialChildSize: 1.0,
-            minChildSize: 0.98,
-            maxChildSize: 1.0,
-            expand: true,
-            builder: (_, controller) =>
+          return  Container(
+            color: Colors.white,
+            height: height,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                const SizedBox(height: 30,),
                 Container(
-                  color: Colors.white,
-                  height: height,
-                  child: ListView(
-                    shrinkWrap: true,
-                    controller: controller,
-                    children: [
-                      SizedBox(
-                        height: height * 2,
-                        child: FlutterPaymentWeb(
-                          url : _walletResponse?.iframeRedirectionUrl,
-                          iframe: _iFrameCode.toString(),
-                          token: _paymentKeyResponse.token.toString(),
-                          loadingWidget: loadingWidget,
-                          backgroundColor: defaultBackgroundColor,
-                        ),
-                      ),
-                    ],
-                  ),
+                  alignment: Alignment.centerRight,
+                  child: IconButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, icon: const Icon(Icons.cancel,color: Colors.black,size: 30,)),
                 ),
+                FlutterPaymentWeb(
+                  url : _walletResponse?.iframeRedirectionUrl,
+                  iframe: _iFrameCode.toString(),
+                  token: _paymentKeyResponse.token.toString(),
+                  loadingWidget: loadingWidget,
+                  backgroundColor: defaultBackgroundColor,
+                ),
+              ],
+            ),
           );
         },
       );
@@ -177,33 +173,33 @@ class PayMob {
       var response = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
+        isDismissible: false,
         builder: (ctx) {
           double height = MediaQuery.of(context).size.height;
-          return DraggableScrollableSheet(
-            initialChildSize: 1.0,
-            minChildSize: 0.98,
-            maxChildSize: 1.0,
-            expand: true,
-            builder: (_, controller) => Container(
-              color: Colors.white,
-              height: height,
-              child: ListView(
-                shrinkWrap: true,
-                controller: controller,
-                children: [
-                  SizedBox(
-                    height: height * 2,
-                    child: FlutterPaymentWeb(
-                      url: url,
-                      iframe: '',
-                      token: '',
-                      parameter: parameter,
-                      loadingWidget: loadingWidget,
-                      backgroundColor: defaultBackgroundColor,
-                    ),
+          return Container(
+            color: Colors.white,
+            height: height,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Container(
+                  alignment: Alignment.centerRight,
+                  child: IconButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, icon: const Icon(Icons.cancel,color: Colors.black,size: 30,)),
+                ),
+                SizedBox(
+                  height: height * 2,
+                  child: FlutterPaymentWeb(
+                    url: url,
+                    iframe: '',
+                    token: '',
+                    parameter: parameter,
+                    loadingWidget: loadingWidget,
+                    backgroundColor: defaultBackgroundColor,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
         },

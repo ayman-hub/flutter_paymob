@@ -26,6 +26,8 @@ class FlutterPaymentWeb extends StatefulWidget {
 
 class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
   bool isLoading = true;
+  bool showProgress = true;
+  double progress = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,147 +35,78 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
     String url = widget.url?? 'https://accept.paymobsolutions.com/api/acceptance/iframes/${widget.iframe}?payment_token=${widget.token}';
 
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 2,
-      child: WebView(
-        initialUrl: url,
-        javascriptMode: JavascriptMode.unrestricted,
-        allowsInlineMediaPlayback: true,
-        debuggingEnabled: true,
-        onProgress: (int progress) {
-          Print.info('WebView is loading (progress : $progress%)');
-        },
-        navigationDelegate: (NavigationRequest request) {
-          Print.info('request::${request.toString()}');
-          if (request.url.contains(widget.parameter??'status')) {
-            try {
-              Print.info('request::${request.toString()}');
-              Navigator.pop(context, Uri.tryParse(request.url)?.queryParameters);
-            } catch (e, s) {
-              Print.error(e, s);
-            }
-           // return NavigationDecision.prevent;
-          }
-          Print.info('allowing navigation to $request');
-          return NavigationDecision.navigate;
-        },
-        onPageStarted: (String url) {
-          Print.info('Page started loading: $url');
-        },
-        onPageFinished: (String url) {
-          Print.info('Page finished loading: $url');
-          Future.delayed(const Duration(milliseconds: 500), () {});
-
-          setState(() {
-            isLoading = false;
-          });
-        },
-        gestureNavigationEnabled: true,
-        zoomEnabled: true,
-        backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
-      ),
-    );
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 2,
+      height: MediaQuery.of(context).size.height/* * 2*/,
       child: Stack(
-        fit: StackFit.loose,
         children: [
-          ListView(
-            shrinkWrap: true,
-            children: [
-              WebView(
-                initialUrl: url,
-                javascriptMode: JavascriptMode.unrestricted,
-                allowsInlineMediaPlayback: true,
-                debuggingEnabled: true,
-                onProgress: (int progress) {
-                  Print.info('WebView is loading (progress : $progress%)');
-                },
-                navigationDelegate: (NavigationRequest request) {
-                  if (request.url.contains('updated')) {
-                    try {
-                      TransactionModel transactionModel = TransactionModel.fromJson(
-                          Uri.tryParse(request.url)?.queryParameters);
-                      Print.info('transaction data:: ${transactionModel.toJson()}');
-                      Navigator.pop(context, transactionModel);
-                    } catch (e, s) {
-                      Print.error(e, s);
-                    }
-                    return NavigationDecision.prevent;
-                  }
-                  Print.info('allowing navigation to $request');
-                  return NavigationDecision.navigate;
-                },
-                onPageStarted: (String url) {
-                  Print.info('Page started loading: $url');
-                },
-                onPageFinished: (String url) {
-                  Print.info('Page finished loading: $url');
-                  Future.delayed(const Duration(milliseconds: 500), () {});
-
-                  setState(() {
-                    isLoading = false;
-                  });
-                },
-                gestureNavigationEnabled: true,
-                zoomEnabled: true,
-                backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
-              ),
-            ],
+          WebView(
+            initialUrl: url,
+            javascriptMode: JavascriptMode.unrestricted,
+            allowsInlineMediaPlayback: true,
+            debuggingEnabled: true,
+            onProgress: (int value) {
+              Print.info('WebView is loading (progress : $value%)');
+              setState(() {
+                if(value <= 99){
+                  showProgress = true;
+                }else{
+                  showProgress = false;
+                }
+                progress = value.toDouble();
+              });
+            },
+            navigationDelegate: (NavigationRequest request) {
+              Print.info('request::${request.toString()}');
+              if (request.url.contains(widget.parameter??'status')) {
+                try {
+                  Print.info('request::${request.toString()}');
+                  Navigator.pop(context, Uri.tryParse(request.url)?.queryParameters);
+                } catch (e, s) {
+                  Print.error(e, s);
+                }
+               // return NavigationDecision.prevent;
+              }
+              Print.info('allowing navigation to $request');
+              return NavigationDecision.navigate;
+            },
+            onPageStarted: (String url) {
+              Print.info('Page started loading: $url');
+            },
+            onPageFinished: (String url) {
+              Print.info('Page finished loading: $url');
+              Future.delayed(const Duration(milliseconds: 500), () {});
+              setState(() {
+                isLoading = false;
+              });
+            },
+            gestureNavigationEnabled: true,
+            zoomEnabled: true,
+            backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
           ),
-          if (isLoading)
-            widget.loadingWidget ??
-                const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
+          isLoading?progressWidget():Container()
         ],
       ),
     );
+  }
 
-    return AnimatedCrossFade(
-      duration: const Duration(milliseconds: 300),
-      crossFadeState:
-          isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      firstChild: const Center(
-        child: CircularProgressIndicator.adaptive(),
-      ),
-      secondChild: WebView(
-        initialUrl: url,
-        javascriptMode: JavascriptMode.unrestricted,
-        allowsInlineMediaPlayback: true,
-        debuggingEnabled: true,
-        onProgress: (int progress) {
-          Print.info('WebView is loading (progress : $progress%)');
-        },
-        navigationDelegate: (NavigationRequest request) {
-          if (request.url.contains('updated')) {
-            try {
-              TransactionModel transactionModel = TransactionModel.fromJson(
-                  Uri.tryParse(request.url)?.queryParameters);
-              Print.info('transaction data:: ${transactionModel.toJson()}');
-              Navigator.pop(context, transactionModel);
-            } catch (e, s) {
-              Print.error(e, s);
-            }
-            return NavigationDecision.prevent;
-          }
-          Print.info('allowing navigation to $request');
-          return NavigationDecision.navigate;
-        },
-        onPageStarted: (String url) {
-          Print.info('Page started loading: $url');
-        },
-        onPageFinished: (String url) {
-          Print.info('Page finished loading: $url');
-          Future.delayed(const Duration(milliseconds: 500), () {});
-
-          setState(() {
-            isLoading = false;
-          });
-        },
-        gestureNavigationEnabled: true,
-        zoomEnabled: true,
-        backgroundColor: const Color(0x00000000),
+ Widget progressWidget() {
+    return Center(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CircularProgressIndicator(
+            value: progress / 100,
+            strokeWidth: 5,
+            backgroundColor: Colors.white,
+            valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+          ),
+          Text(
+            '$progress%',
+            style: const TextStyle(
+              fontSize: 15
+            ),
+          ),
+        ],
       ),
     );
-  }
+ }
 }
