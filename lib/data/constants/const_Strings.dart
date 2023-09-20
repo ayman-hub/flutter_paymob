@@ -109,7 +109,7 @@ class CustomConst {
   static const String Api_Key = "api_key";
   static const String ApiErrorWord = 'api error::';
 
-  static const int connectTimeout = 10000;
+  static const Duration connectTimeout = Duration(milliseconds: 10000);
 
   static const String ContentTypeKey = 'Content-Type';
   static const String ContentTypeValue = 'application/json';

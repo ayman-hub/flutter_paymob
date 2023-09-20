@@ -4,22 +4,22 @@ import 'package:pay_mob/print_types.dart';
 class DioExceptions implements Exception {
 
 
-  DioExceptions.fromDioError(DioError dioError) {
+  DioExceptions.fromDioError(DioException dioError) {
     Print.warning(dioError.toString());
     switch (dioError.type) {
-      case DioErrorType.cancel:
+      case DioExceptionType.cancel:
         message = "Request to API server was cancelled";
         break;
-      case DioErrorType.connectTimeout:
+      case DioExceptionType.connectionTimeout:
         message = "Connection timeout with API server";
         break;
-      case DioErrorType.other:
+      case DioExceptionType.unknown:
         message = "Connection to API server failed due to internet connection";
         break;
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.receiveTimeout:
         message = "Receive timeout in connection with API server";
         break;
-      case DioErrorType.response:
+      case DioExceptionType.badResponse:
         try{
           message = _handleError(dioError.response!.statusCode, dioError.response?.data ?? {});
         }catch(e,s){
@@ -30,7 +30,7 @@ class DioExceptions implements Exception {
           Print.error(e.toString(),s);
         }
         break;
-      case DioErrorType.sendTimeout:
+      case DioExceptionType.sendTimeout:
         message = "Send timeout in connection with API server";
         break;
       default:

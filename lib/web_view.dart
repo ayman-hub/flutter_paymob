@@ -82,7 +82,7 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
             zoomEnabled: true,
             backgroundColor: widget.backgroundColor ?? const Color(0x00000000),
           ),
-          showProgress?progressWidget():Container()
+          isLoading?progressWidget():Container()
         ],
       ),
     );
