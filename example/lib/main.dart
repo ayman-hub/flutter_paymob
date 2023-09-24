@@ -72,7 +72,7 @@ class MyHome extends StatelessWidget {
       Print.warning("error msg:: $msg");
     }, onSuccess: (var map) {
       Print.success(map);
-    }, paymentType: PaymentType.wallet,phone: '01010101010');
+    }, paymentType: PaymentType.creditCard/*,phone: '01010101010'*/);
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
     //! createOrderWithFakeData
