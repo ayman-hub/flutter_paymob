@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pay_mob/data/model/OrderRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
-import 'package:pay_mob/data/model/TransactionModel.dart';
 import 'package:pay_mob/data/model/WalletResponse.dart';
 import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
@@ -41,12 +40,13 @@ class PayMob {
   PayMob.init({
     required String paymentKey,
     required int iframe,
-    required int integrationIDCredit,int? integrationIdWallet,
+    required int integrationIDCredit,
+    int? integrationIdWallet,
   }) {
     _paymentAuthKey = paymentKey;
     _iFrameCode = iframe;
     _integrationIdCredit = integrationIDCredit;
-    _integrationIdWallet = integrationIdWallet??0;
+    _integrationIdWallet = integrationIdWallet ?? 0;
   }
 
   /// helper Method
@@ -93,7 +93,8 @@ class PayMob {
   /// take context just for model bottom Sheet && required Order Information as [OrderRequest]
   /// in Error Case return The reason for the failure of the operation at [string] parameter
   /// in Success Case return The Information Data of the operation at  [transactionModel] parameter
-  Future checkOut(BuildContext context, {
+  Future checkOut(
+    BuildContext context, {
     required OrderRequest orderRequest,
     required Function(String msg) onError,
     required Function(Map map) onSuccess,
@@ -103,7 +104,7 @@ class PayMob {
     Color? defaultBackgroundColor,
   }) async {
     try {
-      if(paymentType == PaymentType.wallet){
+      if (paymentType == PaymentType.wallet) {
         assert(phone!.isNotEmpty && _integrationIdWallet != 0,
             "you should add phone number if you choose wallet and integration_id wallet");
       }
@@ -112,7 +113,8 @@ class PayMob {
       await _payment(paymentType);
       switch (paymentType) {
         case PaymentType.creditCard:
-        /// do nothing
+
+          /// do nothing
           break;
         case PaymentType.wallet:
           await _wallet(phone!);
@@ -122,25 +124,30 @@ class PayMob {
         context: context,
         isScrollControlled: true,
         builder: (ctx) {
-          double height = MediaQuery
-              .of(context)
-              .size
-              .height;
-          return  Container(
+          double height = MediaQuery.of(context).size.height;
+          return Container(
             color: Colors.white,
             height: height,
             child: ListView(
               shrinkWrap: true,
               children: [
-                const SizedBox(height: 30,),
+                const SizedBox(
+                  height: 30,
+                ),
                 Container(
                   alignment: Alignment.centerRight,
-                  child: IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: const Icon(Icons.cancel,color: Colors.black,size: 30,)),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: Colors.black,
+                        size: 30,
+                      )),
                 ),
                 FlutterPaymentWeb(
-                  url : _walletResponse?.iframeRedirectionUrl,
+                  url: _walletResponse?.iframeRedirectionUrl,
                   iframe: _iFrameCode.toString(),
                   token: _paymentKeyResponse.token.toString(),
                   loadingWidget: loadingWidget,
@@ -157,19 +164,18 @@ class PayMob {
         onError(response ?? 'cancel');
       }
     } catch (e, s) {
-      Print.error(e, s);
+      sPrint.error(e, s);
       onError(e.toString());
     }
   }
 
- Future paymentWeb(BuildContext context,String url, {
-    required Function(String msg) onError,
-    required Function(Map? map) onSuccess,
-    Widget? loadingWidget,
-    Color? defaultBackgroundColor,
-   String? parameter
-  }) async {
-   try{
+  Future paymentWeb(BuildContext context, String url,
+      {required Function(String msg) onError,
+      required Function(Map? map) onSuccess,
+      Widget? loadingWidget,
+      Color? defaultBackgroundColor,
+      String? parameter}) async {
+    try {
       var response = await showModalBottomSheet<dynamic>(
         context: context,
         isScrollControlled: true,
@@ -182,12 +188,20 @@ class PayMob {
             child: ListView(
               shrinkWrap: true,
               children: [
-                const SizedBox(height: 30,),
+                const SizedBox(
+                  height: 30,
+                ),
                 Container(
                   alignment: Alignment.centerRight,
-                  child: IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: const Icon(Icons.cancel,color: Colors.black,size: 30,)),
+                  child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.cancel,
+                        color: Colors.black,
+                        size: 30,
+                      )),
                 ),
                 FlutterPaymentWeb(
                   url: url,
@@ -207,10 +221,10 @@ class PayMob {
       } else {
         onError(response ?? 'cancel');
       }
-    }catch(e,s){
-     Print.error(e, s);
-     onError(e.toString());
-   }
+    } catch (e, s) {
+      sPrint.error(e, s);
+      onError(e.toString());
+    }
   }
 
   late TokenModel _tokenModel;
@@ -249,9 +263,11 @@ class PayMob {
   /// return on Sucses [PaymentKeyResponse]
   Future<dynamic> _payment(PaymentType paymentType) async {
     PaymentKeyRequest paymentKeyRequest =
-    PaymentKeyRequest.fromOrderResponse(_orderResponse)
-      ..authToken = _tokenModel.token
-      ..integrationId = paymentType == PaymentType.creditCard?_integrationIdCredit:_integrationIdWallet;
+        PaymentKeyRequest.fromOrderResponse(_orderResponse)
+          ..authToken = _tokenModel.token
+          ..integrationId = paymentType == PaymentType.creditCard
+              ? _integrationIdCredit
+              : _integrationIdWallet;
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }

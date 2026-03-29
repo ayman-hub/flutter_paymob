@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:pay_mob/print_types.dart';
 
-class DioExceptions implements Exception {
-
-
+class DioExceptions<T> implements Exception {
   DioExceptions.fromDioError(DioException dioError) {
-    Print.warning(dioError.toString());
+    sPrint.warning(dioError.toString());
     switch (dioError.type) {
       case DioExceptionType.cancel:
         message = "Request to API server was cancelled";
@@ -20,15 +18,10 @@ class DioExceptions implements Exception {
         message = "Receive timeout in connection with API server";
         break;
       case DioExceptionType.badResponse:
-        try{
-          message = _handleError(dioError.response!.statusCode, dioError.response?.data ?? {});
-        }catch(e,s){
-          message = _handleError(
-              dioError.response!.statusCode,{
-                "msg": 'server error happen please contact developer'
-          });
-          Print.error(e.toString(),s);
-        }
+        message = _handleError(
+          dioError.response!.statusCode,
+          dioError.response?.data ?? {},
+        );
         break;
       case DioExceptionType.sendTimeout:
         message = "Send timeout in connection with API server";
@@ -44,33 +37,52 @@ class DioExceptions implements Exception {
   String? phone;
 
   String _handleError(int? statusCode, dynamic error) {
-    Print.warning('error:::: ${error.toString()}');
+    sPrint.error("error:$statusCode: $error ", StackTrace.current);
+
     switch (statusCode) {
       case 401:
-        return 'error status code 401';
+        sPrint.warning('401 authenticated');
+        return error['msg']?.toString() ??
+            error['error']?.toString() ??
+            'يجب تسجيل الدخول اولأ';
       case 400:
-        print('status code :: 400');
-        return 'Bad request';
+        return error['msg']?.toString() ??
+            error['error']?.toString() ??
+            'Bad request';
       case 404:
-        print('status code :: 404 ${error['msg']}');
-        return '${error["msg"]}';
+        return error['msg']?.toString() ?? "";
+      case 405:
+        return error['msg'] ?? error['error'] ?? "method not allowed";
       case 422:
-        Print.warning('status code :: 422 ${error['msg']}');
-        try{
-          code = error['data']['code']??'12345';
-          phone = error['data']['phone'];
-        }catch(e,s){
-          Print.error(e.toString(), s);
+        try {
+          sPrint.warning('status code :: 422 ${error['error']}');
+          if ((error as Map).containsKey('msg')) {
+            return error['msg'];
+          }
+          if (error is Map<String, dynamic>) {
+            if (error['error'] != null) {
+              Map<String, dynamic> errors = error['error'];
+              String value = errors.values.map((e) {
+                if (e is List) {
+                  return e.map((b) => "error: $b").join(" \n ");
+                } else {
+                  return "error: $e";
+                }
+              }).join(" \n ");
+              message = value;
+            }
+          }
+        } catch (e, s) {
+          sPrint.error(e.toString(), s);
         }
-        return '${error["msg"]}';
+        return '${error["error"]}';
       case 500:
-        print('status code :: 500');
-        return 'server error';
+        return "Internal Server Error";
       default:
-        return 'server error';
+        return "Something went wrong";
     }
   }
 
   @override
-  String toString() => message;
+  String toString() => toString();
 }

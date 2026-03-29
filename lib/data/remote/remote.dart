@@ -20,7 +20,7 @@ class Remote {
     }, onSuccess: (Map<String, dynamic> data) {
       return TokenModel.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
-      throw(data[MSG]);
+      throw (data[MSG]);
     }, formData: false);
   }
 
@@ -32,38 +32,35 @@ class Remote {
         return OrderResponse.fromJson(data);
       },
       onError: (Map<String, dynamic> data) {
-        throw(data[MSG]);
+        throw (data[MSG]);
       },
       formData: false,
     );
   }
 
   Future<dynamic> paymentKey(PaymentKeyRequest paymentKeyRequest) async {
-    return _helper.post(path: '/acceptance/payment_keys', paymentKeyRequest.toJson(),
-        onSuccess: (Map<String, dynamic> data) {
-      Print.success(data);
+    return _helper.post(
+        path: '/acceptance/payment_keys',
+        paymentKeyRequest.toJson(), onSuccess: (Map<String, dynamic> data) {
+      sPrint.success(data);
       return PaymentKeyResponse.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
-      Print.warning('api error:: $data');
-      throw(data[MSG]);
+      sPrint.warning('api error:: $data');
+      throw (data[MSG]);
     }, formData: false);
   }
 
-  Future<dynamic> walletMobile({required String phone, required String token})async{
-    return _helper.post(path: '/acceptance/payments/pay',
-        {
-          "source": {
-            "identifier": phone,
-            "subtype": "WALLET"
-          },
-          "payment_token": token,
-        },
-        onSuccess: (Map<String, dynamic> data) {
-          Print.success(data);
-          return WalletResponse.fromJson(data);
-        }, onError: (Map<String, dynamic> data) {
-          Print.warning('api error:: $data');
-          throw(data[MSG]);
-        }, formData: false);
+  Future<dynamic> walletMobile(
+      {required String phone, required String token}) async {
+    return _helper.post(path: '/acceptance/payments/pay', {
+      "source": {"identifier": phone, "subtype": "WALLET"},
+      "payment_token": token,
+    }, onSuccess: (Map<String, dynamic> data) {
+      sPrint.success(data);
+      return WalletResponse.fromJson(data);
+    }, onError: (Map<String, dynamic> data) {
+      sPrint.warning('api error:: $data');
+      throw (data[MSG]);
+    }, formData: false);
   }
 }

@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-
-
 /*
 * this is all type of color
 * Black:   \x1B[30m
@@ -23,23 +21,23 @@ import 'dart:developer';
   *
   *
 */
-class Print {
+class sPrint {
   static warning(msg) {
-      log(" $msg", name: 'WARNING 📙:');
-   //   print("📙: \x1B[33m $msg \x1B[0m");
+    log(" $msg", name: 'WARNING 📙:');
+    //   print("📙: \x1B[33m $msg \x1B[0m");
   }
 
   static info(msg) {
-      log('$msg', name: 'INFO 📘: ');
-      //print('📘: \x1B[34m   $msg  \x1B[0m');
+    log('$msg', name: 'INFO 📘: ');
+    //print('📘: \x1B[34m   $msg  \x1B[0m');
   }
 
   static success(msg) {
-      log(' $msg', name: 'SUCCESS 📗:');
-      //  print('📗: \x1B[32m   $msg  \x1B[0m');
+    log(' $msg', name: 'SUCCESS 📗:');
+    //  print('📗: \x1B[32m   $msg  \x1B[0m');
   }
 
   static error(msg, StackTrace stackTrace) {
-    log(msg.toString(),name:'ERROR 📕:' , stackTrace: stackTrace);
+    log(msg.toString(), name: 'ERROR 📕:', stackTrace: stackTrace);
   }
 }

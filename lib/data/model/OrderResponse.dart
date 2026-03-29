@@ -32,48 +32,52 @@ import 'package:pay_mob/print_types.dart';
 
 class OrderResponse {
   OrderResponse({
-      this.id, 
-      this.createdAt, 
-      this.deliveryNeeded, 
-      this.merchant, 
-      this.collector, 
-      this.amountCents, 
-      this.shippingData, 
-      this.currency, 
-      this.isPaymentLocked, 
-      this.isReturn, 
-      this.isCancel, 
-      this.isReturned, 
-      this.isCanceled, 
-      this.merchantOrderId, 
-      this.walletNotification, 
-      this.paidAmountCents, 
-      this.notifyUserWithEmail, 
-      this.items, 
-      this.orderUrl, 
-      this.commissionFees, 
-      this.deliveryFeesCents, 
-      this.deliveryVatCents, 
-      this.paymentMethod, 
-      this.merchantStaffTag, 
-      this.apiSource, 
-      this.data, 
-      this.token, 
-      this.url,});
+    this.id,
+    this.createdAt,
+    this.deliveryNeeded,
+    this.merchant,
+    this.collector,
+    this.amountCents,
+    this.shippingData,
+    this.currency,
+    this.isPaymentLocked,
+    this.isReturn,
+    this.isCancel,
+    this.isReturned,
+    this.isCanceled,
+    this.merchantOrderId,
+    this.walletNotification,
+    this.paidAmountCents,
+    this.notifyUserWithEmail,
+    this.items,
+    this.orderUrl,
+    this.commissionFees,
+    this.deliveryFeesCents,
+    this.deliveryVatCents,
+    this.paymentMethod,
+    this.merchantStaffTag,
+    this.apiSource,
+    this.data,
+    this.token,
+    this.url,
+  });
 
   OrderResponse.fromJson(dynamic json) {
     id = json['id'];
     createdAt = json['created_at'];
-    try{
+    try {
       deliveryNeeded = bool.fromEnvironment(json['delivery_needed'].toString());
-    }catch(e,s){
+    } catch (e, s) {
       deliveryNeeded = false;
-      Print.error(e, s);
+      sPrint.error(e, s);
     }
-    merchant = json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
+    merchant =
+        json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;
     collector = json['collector'];
     amountCents = num.tryParse(json['amount_cents'].toString());
-    shippingData = json['shipping_data'] != null ? ResponseShippingData.fromJson(json['shipping_data']) : null;
+    shippingData = json['shipping_data'] != null
+        ? ResponseShippingData.fromJson(json['shipping_data'])
+        : null;
     currency = json['currency'];
     isPaymentLocked = json['is_payment_locked'];
     isReturn = json['is_return'];
@@ -168,9 +172,7 @@ class OrderResponse {
     map['url'] = url;
     return map;
   }
-
 }
-
 
 /// id : 42308968
 /// first_name : "Clifford"
@@ -192,23 +194,24 @@ class OrderResponse {
 
 class ResponseShippingData {
   ResponseShippingData({
-      this.id, 
-      this.firstName, 
-      this.lastName, 
-      this.street, 
-      this.building, 
-      this.floor, 
-      this.apartment, 
-      this.city, 
-      this.state, 
-      this.country, 
-      this.email, 
-      this.phoneNumber, 
-      this.postalCode, 
-      this.extraDescription, 
-      this.shippingMethod, 
-      this.orderId, 
-      this.order,});
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.street,
+    this.building,
+    this.floor,
+    this.apartment,
+    this.city,
+    this.state,
+    this.country,
+    this.email,
+    this.phoneNumber,
+    this.postalCode,
+    this.extraDescription,
+    this.shippingMethod,
+    this.orderId,
+    this.order,
+  });
 
   ResponseShippingData.fromJson(dynamic json) {
     id = json['id'];
@@ -268,7 +271,6 @@ class ResponseShippingData {
     map['order'] = order;
     return map;
   }
-
 }
 
 /// id : 247431
@@ -284,22 +286,25 @@ class ResponseShippingData {
 
 class Merchant {
   Merchant({
-      this.id, 
-      this.createdAt, 
-      this.phones, 
-      this.companyEmails, 
-      this.companyName, 
-      this.state, 
-      this.country, 
-      this.city, 
-      this.postalCode, 
-      this.street,});
+    this.id,
+    this.createdAt,
+    this.phones,
+    this.companyEmails,
+    this.companyName,
+    this.state,
+    this.country,
+    this.city,
+    this.postalCode,
+    this.street,
+  });
 
   Merchant.fromJson(dynamic json) {
     id = json['id'];
     createdAt = json['created_at'];
     phones = json['phones'] != null ? json['phones'].cast<String>() : [];
-    companyEmails = json['company_emails'] != null ? json['company_emails'].cast<String>() : [];
+    companyEmails = json['company_emails'] != null
+        ? json['company_emails'].cast<String>()
+        : [];
     companyName = json['company_name'];
     state = json['state'];
     country = json['country'];
@@ -332,5 +337,4 @@ class Merchant {
     map['street'] = street;
     return map;
   }
-
 }

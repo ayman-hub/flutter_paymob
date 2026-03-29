@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'data/model/TransactionModel.dart';
 import 'print_types.dart';
 
 class FlutterPaymentWeb extends StatefulWidget {
@@ -47,7 +46,7 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
       ..setBackgroundColor(widget.backgroundColor ?? const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(onProgress: (int value) {
-          Print.info('WebView is loading (progress : $value%)');
+          sPrint.info('WebView is loading (progress : $value%)');
           setState(() {
             if (value >= 99) {
               showProgress = false;
@@ -57,29 +56,29 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
             progress = value.toDouble();
           });
         }, onPageStarted: (String url) {
-          Print.info('Page started loading: $url');
+          sPrint.info('Page started loading: $url');
         }, onPageFinished: (String url) {
-          Print.info('Page finished loading: $url');
+          sPrint.info('Page finished loading: $url');
           Future.delayed(const Duration(milliseconds: 500), () {});
           setState(() {
             isLoading = false;
           });
         }, onWebResourceError: (WebResourceError error) {
-          Print.warning(error.url);
-          Print.error(error.description, StackTrace.current);
+          sPrint.warning(error.url);
+          sPrint.error(error.description, StackTrace.current);
         }, onNavigationRequest: (NavigationRequest request) {
-          Print.info('request::${request.toString()}');
+          sPrint.info('request::${request.toString()}');
           if (request.url.contains(widget.parameter ?? 'status') ?? false) {
             try {
-              Print.info('request inside status ::${request.toString()}');
+              sPrint.info('request inside status ::${request.toString()}');
               Navigator.pop(
                   context, Uri.tryParse(request.url ?? "")?.queryParameters);
             } catch (e, s) {
-              Print.error(e, s);
+              sPrint.error(e, s);
             }
             // return NavigationDecision.prevent;
           }
-          Print.info('allowing navigation to $request');
+          sPrint.info('allowing navigation to $request');
           return NavigationDecision.navigate;
         }),
       )

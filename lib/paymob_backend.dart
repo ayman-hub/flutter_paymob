@@ -6,7 +6,6 @@ import 'package:pay_mob/data/model/OrderResponse.dart';
 import 'package:pay_mob/data/model/PaymentKeyRequest.dart';
 import 'package:pay_mob/data/model/PaymentKeyResponse.dart';
 import 'package:pay_mob/data/model/TokenModel.dart';
-import 'package:pay_mob/data/model/TransactionModel.dart';
 import 'package:pay_mob/data/model/WalletResponse.dart';
 import 'package:pay_mob/data/remote/dio_helper.dart';
 import 'package:pay_mob/data/remote/remote.dart';
@@ -103,26 +102,26 @@ class PayMob {
         assert(phone!.isNotEmpty && _integrationIdWallet != 0,
             "you should add phone number if you choose wallet and integration_id wallet");
       }
-      try{
+      try {
         await _getToken();
-      }catch(e,s){
-        Print.error(e, s);
+      } catch (e, s) {
+        sPrint.error(e, s);
         rethrow;
       }
       try {
         /*if (orderRequest.id != null) {
           throw ('duplicate');
         }*/
-        try{
+        try {
           await _order(orderRequest);
           paymentKeyRequest.hasMerchantOrderId = false;
           onSuccess(paymentKeyRequest);
-        }catch(e,s){
-          Print.error(e, s);
+        } catch (e, s) {
+          sPrint.error(e, s);
           rethrow;
         }
       } catch (e, s) {
-        Print.error(e, s);
+        sPrint.error(e, s);
         if (e.toString().contains('duplicate')) {
           paymentKeyRequest = PaymentKeyRequest.fromOrderResponse(orderRequest);
           paymentKeyRequest.hasMerchantOrderId = true;
@@ -130,10 +129,10 @@ class PayMob {
           rethrow;
         }
       }
-      try{
+      try {
         await _payment(paymentType);
-      }catch(e,s){
-        Print.error(e, s);
+      } catch (e, s) {
+        sPrint.error(e, s);
         rethrow;
       }
       switch (paymentType) {
@@ -148,7 +147,7 @@ class PayMob {
       return _walletResponse?.redirectUrl ??
           'https://accept.paymobsolutions.com/api/acceptance/iframes/$_iFrameCode?payment_token=${_paymentKeyResponse.token}';
     } catch (e, s) {
-      Print.error(e, s);
+      sPrint.error(e, s);
       onError(e.toString());
     }
   }
@@ -197,7 +196,7 @@ class PayMob {
       ..integrationId = paymentType == PaymentType.creditCard
           ? _integrationIdCredit
           : _integrationIdWallet;
-    Print.info(paymentKeyRequest.toJson());
+    sPrint.info(paymentKeyRequest.toJson());
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }
