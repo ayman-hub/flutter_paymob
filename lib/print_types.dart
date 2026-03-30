@@ -21,7 +21,7 @@ import 'dart:developer';
   *
   *
 */
-class sPrint {
+class Print {
   static warning(msg) {
     log(" $msg", name: 'WARNING 📙:');
     //   print("📙: \x1B[33m $msg \x1B[0m");

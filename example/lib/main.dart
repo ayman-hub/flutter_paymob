@@ -68,9 +68,9 @@ class MyHome extends StatelessWidget {
     // }
     OrderRequest request = createOrderWithFakeData();
     payMob.checkOut(context, orderRequest: request, onError: (String msg) {
-      sPrint.warning("error msg:: $msg");
+      Print.warning("error msg:: $msg");
     }, onSuccess: (var map) {
-      sPrint.success(map);
+      Print.success(map);
     }, paymentType: PaymentType.creditCard /*,phone: '01010101010'*/);
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');

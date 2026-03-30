@@ -46,7 +46,7 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
       ..setBackgroundColor(widget.backgroundColor ?? const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(onProgress: (int value) {
-          sPrint.info('WebView is loading (progress : $value%)');
+          Print.info('WebView is loading (progress : $value%)');
           setState(() {
             if (value >= 99) {
               showProgress = false;
@@ -56,29 +56,29 @@ class _FlutterPaymentWebState extends State<FlutterPaymentWeb> {
             progress = value.toDouble();
           });
         }, onPageStarted: (String url) {
-          sPrint.info('Page started loading: $url');
+          Print.info('Page started loading: $url');
         }, onPageFinished: (String url) {
-          sPrint.info('Page finished loading: $url');
+          Print.info('Page finished loading: $url');
           Future.delayed(const Duration(milliseconds: 500), () {});
           setState(() {
             isLoading = false;
           });
         }, onWebResourceError: (WebResourceError error) {
-          sPrint.warning(error.url);
-          sPrint.error(error.description, StackTrace.current);
+          Print.warning(error.url);
+          Print.error(error.description, StackTrace.current);
         }, onNavigationRequest: (NavigationRequest request) {
-          sPrint.info('request::${request.toString()}');
+          Print.info('request::${request.toString()}');
           if (request.url.contains(widget.parameter ?? 'status') ?? false) {
             try {
-              sPrint.info('request inside status ::${request.toString()}');
+              Print.info('request inside status ::${request.toString()}');
               Navigator.pop(
                   context, Uri.tryParse(request.url ?? "")?.queryParameters);
             } catch (e, s) {
-              sPrint.error(e, s);
+              Print.error(e, s);
             }
             // return NavigationDecision.prevent;
           }
-          sPrint.info('allowing navigation to $request');
+          Print.info('allowing navigation to $request');
           return NavigationDecision.navigate;
         }),
       )

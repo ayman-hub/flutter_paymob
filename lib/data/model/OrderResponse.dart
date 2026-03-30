@@ -69,7 +69,7 @@ class OrderResponse {
       deliveryNeeded = bool.fromEnvironment(json['delivery_needed'].toString());
     } catch (e, s) {
       deliveryNeeded = false;
-      sPrint.error(e, s);
+      Print.error(e, s);
     }
     merchant =
         json['merchant'] != null ? Merchant.fromJson(json['merchant']) : null;

@@ -105,7 +105,7 @@ class PayMob {
       try {
         await _getToken();
       } catch (e, s) {
-        sPrint.error(e, s);
+        Print.error(e, s);
         rethrow;
       }
       try {
@@ -117,11 +117,11 @@ class PayMob {
           paymentKeyRequest.hasMerchantOrderId = false;
           onSuccess(paymentKeyRequest);
         } catch (e, s) {
-          sPrint.error(e, s);
+          Print.error(e, s);
           rethrow;
         }
       } catch (e, s) {
-        sPrint.error(e, s);
+        Print.error(e, s);
         if (e.toString().contains('duplicate')) {
           paymentKeyRequest = PaymentKeyRequest.fromOrderResponse(orderRequest);
           paymentKeyRequest.hasMerchantOrderId = true;
@@ -132,7 +132,7 @@ class PayMob {
       try {
         await _payment(paymentType);
       } catch (e, s) {
-        sPrint.error(e, s);
+        Print.error(e, s);
         rethrow;
       }
       switch (paymentType) {
@@ -147,7 +147,7 @@ class PayMob {
       return _walletResponse?.redirectUrl ??
           'https://accept.paymobsolutions.com/api/acceptance/iframes/$_iFrameCode?payment_token=${_paymentKeyResponse.token}';
     } catch (e, s) {
-      sPrint.error(e, s);
+      Print.error(e, s);
       onError(e.toString());
     }
   }
@@ -196,7 +196,7 @@ class PayMob {
       ..integrationId = paymentType == PaymentType.creditCard
           ? _integrationIdCredit
           : _integrationIdWallet;
-    sPrint.info(paymentKeyRequest.toJson());
+    Print.info(paymentKeyRequest.toJson());
 
     return _paymentKeyResponse = await _remote.paymentKey(paymentKeyRequest);
   }

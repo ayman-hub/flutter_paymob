@@ -164,7 +164,7 @@ class PayMob {
         onError(response ?? 'cancel');
       }
     } catch (e, s) {
-      sPrint.error(e, s);
+      Print.error(e, s);
       onError(e.toString());
     }
   }
@@ -222,7 +222,7 @@ class PayMob {
         onError(response ?? 'cancel');
       }
     } catch (e, s) {
-      sPrint.error(e, s);
+      Print.error(e, s);
       onError(e.toString());
     }
   }

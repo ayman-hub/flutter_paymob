@@ -3,7 +3,7 @@ import 'package:pay_mob/print_types.dart';
 
 class DioExceptions<T> implements Exception {
   DioExceptions.fromDioError(DioException dioError) {
-    sPrint.warning(dioError.toString());
+    Print.warning(dioError.toString());
     switch (dioError.type) {
       case DioExceptionType.cancel:
         message = "Request to API server was cancelled";
@@ -37,11 +37,11 @@ class DioExceptions<T> implements Exception {
   String? phone;
 
   String _handleError(int? statusCode, dynamic error) {
-    sPrint.error("error:$statusCode: $error ", StackTrace.current);
+    Print.error("error:$statusCode: $error ", StackTrace.current);
 
     switch (statusCode) {
       case 401:
-        sPrint.warning('401 authenticated');
+        Print.warning('401 authenticated');
         return error['msg']?.toString() ??
             error['error']?.toString() ??
             'يجب تسجيل الدخول اولأ';
@@ -55,7 +55,7 @@ class DioExceptions<T> implements Exception {
         return error['msg'] ?? error['error'] ?? "method not allowed";
       case 422:
         try {
-          sPrint.warning('status code :: 422 ${error['error']}');
+          Print.warning('status code :: 422 ${error['error']}');
           if ((error as Map).containsKey('msg')) {
             return error['msg'];
           }
@@ -73,7 +73,7 @@ class DioExceptions<T> implements Exception {
             }
           }
         } catch (e, s) {
-          sPrint.error(e.toString(), s);
+          Print.error(e.toString(), s);
         }
         return '${error["error"]}';
       case 500:

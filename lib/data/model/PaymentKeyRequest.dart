@@ -64,7 +64,7 @@ class PaymentKeyRequest {
   }
 
   static PaymentKeyRequest fromOrderResponse(dynamic data) {
-    sPrint.info("id::: ${data.id}");
+    Print.info("id::: ${data.id}");
     return PaymentKeyRequest(
       amountCents: data.amountCents.toString(),
       orderId: "${data.id}",

@@ -42,10 +42,10 @@ class Remote {
     return _helper.post(
         path: '/acceptance/payment_keys',
         paymentKeyRequest.toJson(), onSuccess: (Map<String, dynamic> data) {
-      sPrint.success(data);
+      Print.success(data);
       return PaymentKeyResponse.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
-      sPrint.warning('api error:: $data');
+      Print.warning('api error:: $data');
       throw (data[MSG]);
     }, formData: false);
   }
@@ -56,10 +56,10 @@ class Remote {
       "source": {"identifier": phone, "subtype": "WALLET"},
       "payment_token": token,
     }, onSuccess: (Map<String, dynamic> data) {
-      sPrint.success(data);
+      Print.success(data);
       return WalletResponse.fromJson(data);
     }, onError: (Map<String, dynamic> data) {
-      sPrint.warning('api error:: $data');
+      Print.warning('api error:: $data');
       throw (data[MSG]);
     }, formData: false);
   }

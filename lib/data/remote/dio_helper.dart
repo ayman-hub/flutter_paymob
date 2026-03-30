@@ -30,8 +30,8 @@ class DioHelper {
       _dio.options.receiveTimeout = CustomConst.connectTimeout;
       Map<String, dynamic> query = {};
       query.addAll(post);
-      sPrint.info('start $post');
-      sPrint.info('link ${checkValidPath(path)}');
+      Print.info('start $post');
+      Print.info('link ${checkValidPath(path)}');
       _response = await _dio.get(
         checkValidPath(path),
         queryParameters: query,
@@ -52,7 +52,7 @@ class DioHelper {
                 _response.data.toString().replaceAll('<!doctype html>', ''));
           }
         }
-        sPrint.success("response in dio: ${_response.data}");
+        Print.success("response in dio: ${_response.data}");
         return onSuccess(_response.data);
       } else {
         return _response.data.toString();
@@ -64,7 +64,7 @@ class DioHelper {
       String msg = '';
       String? code;
       String phone = '';
-      sPrint.error(s.toString(), s);
+      Print.error(s.toString(), s);
       if (error is DioError) {
         DioExceptions dioExceptions = DioExceptions.fromDioError(error);
         msg = dioExceptions.message.toString();
@@ -92,8 +92,8 @@ class DioHelper {
     try {
       _dio.options.connectTimeout = CustomConst.connectTimeout; //5s
       _dio.options.receiveTimeout = CustomConst.connectTimeout;
-      sPrint.info('start $post');
-      sPrint.info('link ${checkValidPath(path)}');
+      Print.info('start $post');
+      Print.info('link ${checkValidPath(path)}');
       _response = await _dio.post(
         checkValidPath(path),
         data: formData ? FormData.fromMap(post) : post,
@@ -111,7 +111,7 @@ class DioHelper {
         if (_response.data is String) {
           _response.data = jsonDecode(_response.data);
         }
-        sPrint.success(
+        Print.success(
             "response in dio ${_response.data.runtimeType}: ${_response.data}");
         return onSuccess(_response.data);
       } else {
@@ -121,16 +121,16 @@ class DioHelper {
       String msg = '';
       String? code;
       String phone = '';
-      sPrint.warning(error);
+      Print.warning(error);
       if (error is DioError) {
         /*  DioExceptions dioExceptions = DioExceptions.fromDioError(error);
         msg = dioExceptions.message.toString();*/
         return onError({MSG: error.response?.data});
       } else {
-        sPrint.error(error.toString(), s);
+        Print.error(error.toString(), s);
         msg = error.toString();
       }
-      sPrint.warning(msg);
+      Print.warning(msg);
       return onError({MSG: error});
     }
   }
@@ -138,7 +138,7 @@ class DioHelper {
   void showProgress(received, total) {
     if (total != -1) {
       String progress = (received / total * 100).toStringAsFixed(0) + "%";
-      sPrint.info(progress);
+      Print.info(progress);
     }
   }
 }
