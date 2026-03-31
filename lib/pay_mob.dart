@@ -128,8 +128,7 @@ class PayMob {
           return Container(
             color: Colors.white,
             height: height,
-            child: ListView(
-              shrinkWrap: true,
+            child: Column(
               children: [
                 const SizedBox(
                   height: 30,
@@ -146,12 +145,16 @@ class PayMob {
                         size: 30,
                       )),
                 ),
-                FlutterPaymentWeb(
-                  url: _walletResponse?.iframeRedirectionUrl,
-                  iframe: _iFrameCode.toString(),
-                  token: _paymentKeyResponse.token.toString(),
-                  loadingWidget: loadingWidget,
-                  backgroundColor: defaultBackgroundColor,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: FlutterPaymentWeb(
+                      url: _walletResponse?.iframeRedirectionUrl,
+                      iframe: _iFrameCode.toString(),
+                      token: _paymentKeyResponse.token.toString(),
+                      loadingWidget: loadingWidget,
+                      backgroundColor: defaultBackgroundColor,
+                    ),
+                  ),
                 ),
               ],
             ),

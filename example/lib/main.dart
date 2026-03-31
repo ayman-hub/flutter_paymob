@@ -28,19 +28,21 @@ class _MyAppState extends State<MyApp> {
 class MyHome extends StatelessWidget {
   MyHome({Key? key}) : super(key: key);
   String token = '';
-  int iframe = 435339;
-  final int integrationIdCredit = 2448842;
-  final int integrationIdWallet = 3295425;
+  int iframe = 819596; // 435339;
+  final int integrationIdCredit = 4447433;
+  final int integrationIdWallet = 4447439;
 
   final peymentkey =
-      'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpRM05ETXhMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuQmVHR0hLQ1NtN0RoZmVJWTlhNzU1RFRlSXM3T1dJQlZCLTlLVkRYelh0TWpoVDhkaW1tRzdsYW9mWTd3SE5CcWtiYmF4QjFSNFU5eWtMaGxtYXNHV2c=';
+      "ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1RVMU5UWTNMQ0p1WVcxbElqb2lNVGMzTkRnNU56RTVPUzQxTXpNeU56UWlmUS5BV1FVTGRxT1MxbkNLSVdfWVJrRTJ0SVQ0dm1PRG9OZGs0cGZsX1NUTVk3YXJUazVfZ0dTMVVDbG12VHhKN193VUpabVg4QS1Wdi1rWFFaRVl1S0ozdw==";
+
+  // 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2TWpRM05ETXhMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuQmVHR0hLQ1NtN0RoZmVJWTlhNzU1RFRlSXM3T1dJQlZCLTlLVkRYelh0TWpoVDhkaW1tRzdsYW9mWTd3SE5CcWtiYmF4QjFSNFU5eWtMaGxtYXNHV2c=';
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> onTap(BuildContext context) async {
     PayMob payMob = PayMob.init(
       paymentKey: peymentkey,
       iframe: PayMob.getIframeCodeFromIframeLink(
-        'https://accept.paymob.com/api/acceptance/iframe/435339?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVPREExTmpRM0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmxRQTJnTUlHUWJtSVBKZFdXaWtmZFg0V3plVkk0cUFCOUFXT0VTRkpNUGQ4V2RBT0FtRE1NX1pseTRBdEVOT21ZczRuNVB2OERVRC0zZmhFdEdXQlFR',
+        'https://accept.paymob.com/api/acceptance/iframe/$iframe?token=ZXlKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6VXhNaUo5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2laWGh3SWpveE5qWTVPREExTmpRM0xDSndhR0Z6YUNJNklqYzJPV05sWXpZNU1tUmhPVFkyT0RjME5qaG1OVEUxTjJVM09UWTBNVEkxTTJOaE5UUXhZalEzWlRWbE5UTmxOVGhqTVRkbU1UUmlZbVkxTkRrMFkyTWlMQ0p3Y205bWFXeGxYM0JySWpveU5EYzBNekY5LmxRQTJnTUlHUWJtSVBKZFdXaWtmZFg0V3plVkk0cUFCOUFXT0VTRkpNUGQ4V2RBT0FtRE1NX1pseTRBdEVOT21ZczRuNVB2OERVRC0zZmhFdEdXQlFR',
       ),
       integrationIDCredit: integrationIdCredit,
       integrationIdWallet: integrationIdWallet,
@@ -71,7 +73,7 @@ class MyHome extends StatelessWidget {
       Print.warning("error msg:: $msg");
     }, onSuccess: (var map) {
       Print.success(map);
-    }, paymentType: PaymentType.creditCard /*,phone: '01010101010'*/);
+    }, paymentType: PaymentType.wallet, phone: '01010101010');
     /* await payMob.getToken();
     Print.info('data:: ${payMob.tokenModel}');
     //! createOrderWithFakeData
